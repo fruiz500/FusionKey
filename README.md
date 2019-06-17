@@ -1,7 +1,7 @@
 # FusionKey-extension
 Fusion of PassLok and SynthPass
 
-This is where you find them in the respective app strores:
+This is where you find them in the respective app stores:
 Chrome: https://chrome.google.com/webstore/detail/fusionkey/legnppmlegkibpinfjodjbejohblaaam
 Firefox: https://addons.mozilla.org/en-US/firefox/addon/fusionkey/
 
