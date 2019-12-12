@@ -17,7 +17,7 @@
 	textheight();
 
 //  Clear out "sorry, no JavaScript" warning and display the type of source
-	keyMsg.textContent = "Welcome to FusionKey\r\nSelect your Identity and enter its Master Key. Then click OK";
+	pwdMsg.textContent = "Welcome to FusionKey\r\nSelect your Identity and enter its Master Key. Then click OK";
 
 //set global variable indicating if there is a Chrome sync data area. Works for Chrome and Firefox apps and extension
 var ChromeSyncOn = false;

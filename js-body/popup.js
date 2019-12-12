@@ -1,8 +1,214 @@
 // code for interaction with web pages, based on SynthPass code, only for universal extension
+var masterPwd;
+
+//what happens when the content or background scripts send something back
+chrome.runtime.onMessage.addListener(
+  function(request, sender, sendResponse) {
+	  
+	if(request.message == "start_info"){							//initial message from content script; begins with SynthPass stuff	
+		clearTimeout(startTimer);	  
+		var hostParts = request.host.split('.');						//get name of the website, ignoring subdomains
+		if(hostParts[hostParts.length - 1].length == 2 && hostParts[hostParts.length - 2].length < 4){			//domain name with second-level suffix
+			websiteName = hostParts.slice(-3).join('.')
+		}else{
+			websiteName = hostParts.slice(-2).join('.')				//normal domain name
+		}
+		pwdNumber = Math.max(pwdNumber,request.number);
+		isUserId = request.isUserId	;
+  
+		if(isUserId){								//userId field found, so display box, filled from storage
+			displaySynth();
+			userTable.style.display = 'block';
+			okBtnSynth.style.display = '';
+			synthMsg.textContent = "I cannot see a password to be filled, but there is an input that might take a user name"
+		}
+
+		if(pwdNumber){					             //password boxes found, so display the appropriate areas and load serial into first box
+			//populate cached Key and interface	  	
+			if(masterPwd){
+				masterPwd1.value = masterPwd;
+				showPwdMode1.style.display = 'none'
+			}else{
+				retrieveMaster()
+			}
+
+			displaySynth();
+			pwdTable.style.display = 'block';
+			userTable.style.display = 'block';
+			if(!isUserId){idLabel.style.display = 'none';userID.style.display = 'none';}		//don't display user ID box if no inputs
+			okBtnSynth.style.display = '';
+
+			if(pwdNumber == 1){						//only one password box: display single input
+				if(masterPwd){
+					synthMsg.textContent = "Master Key still active; click OK"
+				}else{
+					synthMsg.textContent = "Enter Master Key and optional serial, click OK"
+				}
+			}else if(pwdNumber >= 2){				//2 password boxes: display two inputs and load serial on top box	  
+				synthMsg.textContent = "Move the serial if the old password is not first\r\nTo take password as-is without storing, write a dash as serial\r\nTo store a password, write a plus as serial";
+				row2.style.display = '';
+				if(pwdNumber >= 3){					//3 boxes
+					row3.style.display = '';
+					if(pwdNumber == 4){				//4 boxes, which is the max
+						row4.style.display = '';
+					}else if(pwdNumber >= 5){		//too many boxes
+						pwdTable.style.display = 'none';
+						okBtn.style.display = 'none';
+						synthMsg.textContent = "Too many password fields. Try filling them manually";
+					}
+				}	  
+			}
+
+	//now get the serial from sync storage, and put it in the first serial box, and the userName in its place
+			chrome.storage.sync.get(websiteName, function (obj){
+				var serialData = obj[websiteName];
+				if(serialData){
+					if(serialData[0]) serial1.value = serialData[0];			//populate serial box
+					if(serialData[1]) userID.value = serialData[1];		//and user ID regardless of whether it is displayed
+					if(serialData[2]) pwdLength.value = serialData[2];		//and password length, if any
+					if(serialData[3]) cryptoStr = serialData[3];			//put encrypted password, if any, in global variable
+				}
+			});
+	  
+	  //close everything and erase cached Master Password and encrypted stuff after five minutes
+	  		setTimeout(function(){
+				masterPwd = '';
+				chrome.runtime.sendMessage({message: 'reset_now'});
+				window.close();
+			}, 300000);
+			masterPwd1.focus()
+		  
+		}else{									//no passwords to be filled, so open the regular PassLok interface, with the main box filled
+			if(!KeyStr){								//get keys from background if not already present
+				pwdBox.focus();
+				retrieveKeys()
+			}
+			displayPL();
+
+			if(request.PLstuff.length){					//some data collected from the page, to be put in PassLok's boxes
+				var length = request.PLstuff.length;
+				if(length > 1){
+					if(websiteName == 'google.com' | websiteName == 'live.com'){
+						mainBox.innerText = request.PLstuff[0]				//innerText so line breaks are preserved. Important for text stego
+					}else if(websiteName == 'yahoo.com'){
+						if(request.PLstuff[0].slice(0,4) == 'Mail'){
+							mainBox.innerText = request.PLstuff[1]
+						}else{
+							mainBox.innerText = request.PLstuff[0]
+						}
+					}else{
+						mainBox.innerText = confirm('It seems there is more than one crypto item on the page. If you click OK, the first will be taken, otherwise the last will be taken.') ? request.PLstuff[0] : request.PLstuff[length - 1]
+					}
+				}else{
+					mainBox.innerText = request.PLstuff[0]
+				}
+			}
+			if(KeyStr){	
+				key2any();
+				getSettings();
+				pasteMain()
+			}
+			if(request.largeInputs > 0){			//there are fillable boxes, so set flag so the Send to Page button can be displayed
+				hasInputBoxes = true
+			}
+		}
+
+	}else if(request.message == "keys_fromBg"){			//get cached keys from background
+		if(request.KeyStr){
+			KeyStr = request.KeyStr;
+			KeySgn = new Uint8Array(32);				    //must be Uint8Array type
+			for(var i = 0; i < 32; i++) KeySgn[i] = request.KeySgn[i];
+			KeyDH = new Uint8Array(32);				    //must be Uint8Array type
+			for(var i = 0; i < 32; i++) KeyDH[i] = request.KeyDH[i];
+			KeyDir = new Uint8Array(32);				    //must be Uint8Array type
+			for(var i = 0; i < 32; i++) KeyDir[i] = request.KeyDir[i];
+			myLock = new Uint8Array(32);
+			for(var i = 0; i < 32; i++) myLock[i] = request.myLock[i];
+			myLockStr = request.myLockStr;
+			myezLock = request.myezLock;
+			myEmail = request.myEmail;
+			userName = request.userName;
+			locDir = request.locDir
+		}
+				
+	}else if(request.message == "master_fromBg"){		//same for SynthPass master Password
+		if(request.masterPwd){
+			masterPwd = request.masterPwd;
+			masterPwd1.value = masterPwd;
+			showPwdMode1.style.display = 'none'
+		}
+
+	}else if(request.message == "delete_keys"){			//delete cached keys
+		masterPwd = '';
+		KeyStr = '';
+		KeySgn = '';
+		KeyDH = '';
+		KeyDir = '';
+		myEmail = '';
+		myLock = '';
+		myLockStr = '';
+		myezLock = '';
+		userName = '';
+		LocDir = {};
+		pwdMsg.textContent = 'Your Password has expired. Please enter it again';
+		pwdMsg.style.color = ''
+
+	}else if(request.message == "done") {		//content script done, so store the serial, if any, of the password that has focus, plus the user name
+		if(synthPass.style.display == 'block'){	//send SP master to background
+			var pwdStr = document.getElementById("masterPwd" + lastFocus).value.trim();
+			if(pwdStr){
+				masterPwd = pwdStr;
+				preserveMaster()
+			}
+    		var	serialStr = document.getElementById("serial" + lastFocus).value.trim(),
+				userStr = userID.value.trim(),
+				lengthStr = pwdLength.value.trim();
+			if(serialStr == '-') serialStr = '';									//don't store '-' serial
+
+		//store serial, user name, password length, and encrypted password if they exist	
+			if(websiteName){										
+				var jsonfile = {};
+				jsonfile[websiteName] = [serialStr,userStr,lengthStr,cryptoStr];
+    			chrome.storage.sync.set(jsonfile)
+			}
+
+		}else{							//send PL keys to background
+			preserveKeys()
+		}
+
+		window.close()
+	}
+  }
+)
+
+function preserveMaster(){
+	if(masterPwd){
+		chrome.runtime.sendMessage({message: "reset_timer"});			//reset auto timer on background page
+		chrome.runtime.sendMessage({message: "preserve_master", masterPwd: masterPwd})
+	}
+}
+
+function preserveKeys(){
+	if(KeyStr){
+		chrome.runtime.sendMessage({message: "reset_timer"});			//reset auto timer on background page
+		chrome.runtime.sendMessage({message: 'preserve_keys', KeyStr: KeyStr, KeySgn: KeySgn, KeyDH: KeyDH, KeyDir: KeyDir, myEmail: myEmail, myLock: myLock, myLockStr: myLockStr, myezLock: myezLock, userName: userName, locDir: locDir});
+	}
+}
+
+function retrieveMaster(){
+	chrome.runtime.sendMessage({message: 'retrieve_master'})
+}
+
+function retrieveKeys(){
+	chrome.runtime.sendMessage({message: 'retrieve_keys'})
+}
+
+//now that the receiving code is in place, begin by retrieving data stored in background page
+retrieveMaster();
+retrieveKeys();
 
 //global variables that will be used in computations
 var websiteName, pwdNumber = 0, hasInputBoxes, cryptoStr = '';
-var bgPage = chrome.extension.getBackgroundPage();			//to cache the master password
 
 //gets executed with the OK button
 function doSynth(e) {
@@ -47,33 +253,33 @@ function doSynth(e) {
 	synthMsg.style.color = '';
 	blinkMsg(synthMsg);
 	
-  setTimeout(function(){														//the rest after a 0 ms delay
-	if(pwdTable.style.display == 'block'){					//do passwords if the boxes are displayed, otherwise, just userName
-		var pwdOut = [],			//compute the new password into an array
-			newPwd = pwdSynth(1,pwdStr1,serialStr1,isPin,isAlpha);
-		if(!newPwd) return;								//bail out if just erasing stored password
-		pwdOut.push(newPwd.slice(0,lengthStr));
+	setTimeout(function(){														//the rest after a 0 ms delay
+		if(pwdTable.style.display == 'block'){					//do passwords if the boxes are displayed, otherwise, just userName
+			var pwdOut = [],			//compute the new password into an array
+				newPwd = pwdSynth(1,pwdStr1,serialStr1,isPin,isAlpha);
+			if(!newPwd) return;								//bail out if just erasing stored password
+			pwdOut.push(newPwd.slice(0,lengthStr));
 	
 	//fill missing inputs and compute the rest of the passwords
-		if(pwdNumber > 1){
-			if(!pwdStr2) pwdStr2 = pwdStr1;
-			if(!serialStr2) serialStr2 = serialStr1;
-			newPwd = (serial2.value == serial1.value) && (pwdStr2 == pwdStr1) && serialStr2 != '+' ? pwdOut[0] : pwdSynth(2,pwdStr2,serialStr2,isPin,isAlpha);
-			pwdOut.push(newPwd.slice(0,lengthStr))
-		}
-		if(pwdNumber > 2){
-			if(!pwdStr3) pwdStr3 = pwdStr2;
-			if(!serialStr3) serialStr3 = serialStr2;
-			newPwd = (serial3.value == serial2.value) && (pwdStr3 == pwdStr2) ? pwdOut[1] : pwdSynth(3,pwdStr3,serialStr3,isPin,isAlpha);
-			pwdOut.push(newPwd.slice(0,lengthStr))
-		}
-		if(pwdNumber > 3){
-			if(!pwdStr4) pwdStr4 = pwdStr3;
-			if(!serialStr4) serialStr4 = serialStr3;
-			newPwd = (serial4.value == serial3.value) && (pwdStr4 == pwdStr3) ? pwdOut[2] : pwdSynth(4,pwdStr4,serialStr4,isPin,isAlpha);
-			pwdOut.push(newPwd.slice(0,lengthStr))
-		}
-	  }
+			if(pwdNumber > 1){
+				if(!pwdStr2) pwdStr2 = pwdStr1;
+				if(!serialStr2) serialStr2 = serialStr1;
+				newPwd = (serial2.value == serial1.value) && (pwdStr2 == pwdStr1) && serialStr2 != '+' ? pwdOut[0] : pwdSynth(2,pwdStr2,serialStr2,isPin,isAlpha);
+				pwdOut.push(newPwd.slice(0,lengthStr))
+			}
+			if(pwdNumber > 2){
+				if(!pwdStr3) pwdStr3 = pwdStr2;
+				if(!serialStr3) serialStr3 = serialStr2;
+				newPwd = (serial3.value == serial2.value) && (pwdStr3 == pwdStr2) ? pwdOut[1] : pwdSynth(3,pwdStr3,serialStr3,isPin,isAlpha);
+				pwdOut.push(newPwd.slice(0,lengthStr))
+			}
+			if(pwdNumber > 3){
+				if(!pwdStr4) pwdStr4 = pwdStr3;
+				if(!serialStr4) serialStr4 = serialStr3;
+				newPwd = (serial4.value == serial3.value) && (pwdStr4 == pwdStr3) ? pwdOut[2] : pwdSynth(4,pwdStr4,serialStr4,isPin,isAlpha);
+				pwdOut.push(newPwd.slice(0,lengthStr))
+			}
+	  	}
 		//send new passwords to page
 		if(userTable.style.display == 'block'){
     		chrome.tabs.sendMessage(activeTab.id, {message: "clicked_OK", passwords: pwdOut, userName: userStr})
@@ -82,20 +288,20 @@ function doSynth(e) {
 		}
 		
 		setTimeout(function(){				//close window after 2 seconds in case the content script does not reply
-		  window.close();
-	  	}, 2000)
-  },0);
+			window.close();
+	  	}, 2000);
+	},0)
 }
 
 //this for the Send to Page button in the PassLok interface
 function send2page(){
 	setTimeout(function(){
-	chrome.tabs.sendMessage(activeTab.id, {message: "clicked_OK", PLoutput: mainBox.innerHTML})
+		chrome.tabs.sendMessage(activeTab.id, {message: "clicked_OK", PLoutput: mainBox.innerHTML})
 		
 		setTimeout(function(){				//close window after 2 seconds in case the content script does not reply
-		  window.close();
-	  	}, 2000)
-  },0);	
+			window.close();
+	  	}, 2000);
+	},0)
 }
 
 //asks for password again, presumably under different identity
@@ -114,8 +320,8 @@ function resetIdentity(){
 	chrome.runtime.sendMessage({message: "reset_now"});			//delete everything in background page
 	keyScr.style.display = 'block';
 	shadow.style.display = 'block';
-	keyMsg.textContent = 'Select Identity and enter Master Key';
-	keyMsg.style.color = ''
+	pwdMsg.textContent = 'Select Identity and enter Master Key';
+	pwdMsg.style.color = ''
 }
 
 //synthesizes a new password, or stores and retrieves one provided by user
@@ -187,164 +393,6 @@ function pwdSynth(boxNumber, pwd, serial, isPin, isAlpha){
 	}
 }
 
-//what happens when the content script sends something back
-chrome.runtime.onMessage.addListener(
-  function(request, sender, sendResponse) {
-	  
-	bgPage = chrome.extension.getBackgroundPage();
-	var prevPwd = bgPage.masterPwd;
-	  
-	if( request.message === "start_info" ) {							//initial message from content script	
-		  
-	  var hostParts = request.host.split('.');						//get name of the website, ignoring subdomains
-	  if(hostParts[hostParts.length - 1].length == 2 && hostParts[hostParts.length - 2].length < 4){			//domain name with second-level suffix
-		  	websiteName = hostParts.slice(-3).join('.')
-	  }else{
-	  		websiteName = hostParts.slice(-2).join('.')				//normal domain name
-	  }
-	  pwdNumber = Math.max(pwdNumber,request.number);
-	  isUserId = request.isUserId	;
-	  
-	  if(isUserId){								//userId field found, so display box, filled from storage
-	  	displaySynth();
-	  		userTable.style.display = 'block';
-			okBtnSynth.style.display = '';
-			synthMsg.textContent = "I cannot see a password to be filled, but there is an input that might take a user name"
-	  }
-
-	  if(pwdNumber){					             //password boxes found, so display the appropriate areas and load serial into first box
-	   displaySynth();
-		  pwdTable.style.display = 'block';
-		  userTable.style.display = 'block';
-		  if(!isUserId){idLabel.style.display = 'none';userID.style.display = 'none';}		//don't display user ID box if no inputs
-		  okBtnSynth.style.display = '';
-
-		//populate cached Key and interface	  	
-		  if(prevPwd){
-			  masterPwd1.value = prevPwd;
-				showPwdMode1.style.display = 'none'
-		  }
-		  
-		  if(pwdNumber == 1){						//only one password box: display single input
-		  	  if(prevPwd){
-				  synthMsg.textContent = "Master Key still active; click OK"
-			  }else{
-				  synthMsg.textContent = "Enter Master Key and optional serial, click OK"
-			  }
-		  }else if(pwdNumber >= 2){				//2 password boxes: display two inputs and load serial on top box	  
-			  synthMsg.textContent = "Move the serial if the old password is not first\r\nTo take password as-is without storing, write a dash as serial\r\nTo store a password, write a plus as serial";
-			  row2.style.display = '';
-			  if(pwdNumber >= 3){					//3 boxes
-				  row3.style.display = '';
-				  if(pwdNumber == 4){				//4 boxes, which is the max
-					  row4.style.display = '';
-				  }else if(pwdNumber >= 5){		//too many boxes
-					  pwdTable.style.display = 'none';
-		  			  okBtn.style.display = 'none';
-					  synthMsg.textContent = "Too many password fields. Try filling them manually";
-				  }
-			  }	  
-		  }
-	//now get the serial from sync storage, and put it in the first serial box, and the userName in its place
-	  chrome.storage.sync.get(websiteName, function (obj){
-		var serialData = obj[websiteName];
-		if(serialData){
-			if(serialData[0]) serial1.value = serialData[0];			//populate serial box
-			if(serialData[1]) userID.value = serialData[1];		//and user ID regardless of whether it is displayed
-			if(serialData[2]) pwdLength.value = serialData[2];		//and password length, if any
-			if(serialData[3]) cryptoStr = serialData[3];			//put encrypted password, if any, in global variable
-		}
-	  });
-	  
-	  //close everything and erase cached Master Password and encrypted stuff after five minutes
-	  setTimeout(function(){
-		  bgPage.masterPwd = '';
-		  window.close();
-	  }, 300000)
-		  masterPwd1.focus()
-		  
-	  }else{									//no passwords to be filled, so open the regular PassLok interface, with the main box filled
-	  
-	  	displayPL();
-	  	if(prevPwd){
-			userName = bgPage.userName;			//get identity first, and fill things if not null
-			if(userName){
-				if(!KeyStr){	 					//so it gets settings only once
-					keyScr.style.display = 'none';
-					shadow.style.display = 'none';
-					pwdBox.value = prevPwd;
-					KeyStr = prevPwd;
-					KeyDir = bgPage.keyDir;
-					KeySgn = bgPage.keySgn;
-					KeyDH = bgPage.keyDH;
-					myEmail = bgPage.myEmail;
-					myLock = bgPage.myLock;
-					locDir = bgPage.locDir;
-					myLockStr = bgPage.myLockStr;
-					myezLock = bgPage.myezLock;
-					getSettings()
-				}
-			}else{
-				pwdBox.value = prevPwd				//just pre-fill Key, but the rest is unknown so user must still select an identity
-			}
-		}else{
-		  pwdBox.focus()
-	 	}
-
-	  	if(request.PLstuff.length){
-			var length = request.PLstuff.length;
-			if(length > 1){
-				if(websiteName == 'google.com' | websiteName == 'live.com'){
-					mainBox.innerText = request.PLstuff[0]				//innerText so line breaks are preserved. Important for text stego
-				}else if(websiteName == 'yahoo.com'){
-					if(request.PLstuff[0].slice(0,4) == 'Mail'){
-						mainBox.innerText = request.PLstuff[1]
-					}else{
-						mainBox.innerText = request.PLstuff[0]
-					}
-				}else{
-					mainBox.innerText = confirm('It seems there is more than one crypto item on the page. If you click OK, the first will be taken, otherwise the last will be taken.') ? request.PLstuff[0] : request.PLstuff[length - 1]
-				}
-			}else{
-				mainBox.innerText = request.PLstuff[0]
-			}
-			if(pwdBox.value) pasteMain()
-		}
-		if(request.largeInputs > 0){			//there are fillable boxes, so set flag so the Send to Page button can be displayed
-			hasInputBoxes = true
-		}
-	  }
-    }
-
- 	if( request.message === "done" ) {		//content script done, so store the serial, if any, of the password that has focus, plus the user name
-		if(synthPass.style.display == 'block'){	//send SP master to background
-			var pwdStr = document.getElementById("masterPwd" + lastFocus).value.trim();
-			if(pwdStr){
-				bgPage = chrome.extension.getBackgroundPage();
-				bgPage.masterPwd = pwdStr;					//store keys between popup loads; auto timer is set in bodyscript.js
-			
-				bgPage.pwdTime = new Date().getTime();
-				chrome.runtime.sendMessage({message: "reset_timer"})			//reset auto timer on background page
-			}
-    		var	serialStr = document.getElementById("serial" + lastFocus).value.trim(),
-				userStr = userID.value.trim(),
-				lengthStr = pwdLength.value.trim();
-			if(serialStr == '-') serialStr = '';									//don't store '-' serial
-
-		//store serial, user name, password length, and encrypted password if they exist											
-			var jsonfile = {};
-			jsonfile[websiteName] = [serialStr,userStr,lengthStr,cryptoStr];
-    		chrome.storage.sync.set(jsonfile)
-
-		}else{							//send PL keys to background
-			sendKeysToBg()
-		}
-
-		window.close()
-	}
-  }
-)
-
 //displays SynthPass interface
 function displaySynth(){
 	passLok.style.display = 'none';
@@ -357,26 +405,6 @@ function displayPL(){
 	passLok.style.display = 'block';
 	synthPass.style.display = 'none';
 	document.body.style.height = '580px'
-}
-
-//sends keys to background page
-function sendKeysToBg(){
-	if(KeyStr){
-		bgPage = chrome.extension.getBackgroundPage();
-		bgPage.masterPwd = KeyStr;					//store keys between popup loads; auto timer is set in bodyscript.js
-		bgPage.keyDir = KeyDir;
-		bgPage.keySgn = KeySgn;
-		bgPage.keyDH = KeyDH;
-		bgPage.myEmail = myEmail;
-		bgPage.myLock = myLock;
-		bgPage.locDir = locDir;
-		bgPage.myLockStr = myLockStr;
-		bgPage.myezLock = myezLock;
-		bgPage.userName = userName;
-			
-		bgPage.pwdTime = new Date().getTime();
-		chrome.runtime.sendMessage({message: "reset_timer"})			//reset auto timer on background page
-	}
 }
 
 //fetches userId and displays in box so it can be added
@@ -399,7 +427,7 @@ function fetchUserId(){
 }
 
 //this for showing and hiding text in the Password boxes
-function showPwd(number){
+function showSynthPwd(number){
 	var pwdEl = document.getElementById('masterPwd' + number),
 		imgEl = document.getElementById('showPwdMode' + number);
 	if(pwdEl.type == "password"){
@@ -424,11 +452,10 @@ function pwdSynthKeyup(evt){
 	}
 	if(key == 13){doSynth()} else{
 		 if(pwdEl.value.trim()){
-			 keyStrength(pwdEl.value,true,false)
+			 keyStrength(pwdEl.value,'synth')
 		 }else{
 			 synthMsg.textContent = "Please enter the Master Key";
-			 synthMsg.style.color = '';
-			 hashili('synthMsg','')
+			 synthMsg.style.color = ''
 		 }
 	}
 }

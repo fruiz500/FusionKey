@@ -93,7 +93,7 @@ function removeLock(){
 		lockMsg.textContent = 'Delete not available in Guest mode\r\nPlease restart PassLok';
 		return
 	}
-	var	name = lockBox.textContent,
+	var	name = lockBox.textContent.trim(),
 		index = searchStringInArrayDB(name,lockNames);
 	if( index >= 0){
 		var fullName = lockNames[index];
@@ -184,9 +184,9 @@ function decryptLock(){
 		decryptItem();
 		nameBeingUnlocked = ''
 	}
-	if(lockBox.textContent != ''){
+	if(lockBox.textContent.trim()){
 		var listArray = lockBox.innerHTML.replace(/\n/g,'<br>').split('<br>').filter(Boolean);
-		if(lockBox.textContent.length > 500){
+		if(lockBox.textContent.trim().length > 500){
 			lockBox.innerHTML = decryptSanitizer(LZString.decompressFromBase64(lockBox.textContent).trim());
 			newCover(lockBox.textContent.trim());							//this for loading cover text from Lock screen
 			lockMsg.textContent = 'New Cover text extracted and ready to use'
@@ -194,9 +194,9 @@ function decryptLock(){
 			lockMsg.textContent = 'List extracted'
 		} else if(stripTags(lockBox.textContent).length == 43 || stripTags(lockBox.textContent).length == 50){
 			lockMsg.textContent = 'Lock extracted'
-		} else if(lockBox.textContent.length == 42){
+		} else if(lockBox.textContent.trim().length == 42){
 			lockMsg.textContent = 'Random Key extracted'
-		} else if(lockMsg.textContent == 'myself'){
+		} else if(lockMsg.textContent.trim() == 'myself'){
 			lockMsg.textContent = 'Email/token extracted'
 		} else {
 			lockMsg.textContent = 'Shared Key extracted'
@@ -262,7 +262,7 @@ function mergeLockDB(){
 		locklen = lockstr2.length,
 		mainlen = mainstr2.length;
 
-	if(lockstr.split('\n').length > 1){			//the real database merge implies multiline
+	if(lockstr.split('<br>').length > 1){			//the real database merge implies multiline
 		if(learnMode.checked){
 			var reply = confirm("The items in the box will be merged into the permanent directory, replacing existing items of the same name. This is irreversible. Cancel if this is not what you want.");
 			if(!reply) return
@@ -275,7 +275,7 @@ function mergeLockDB(){
 			}
 			return
 		}
-		var newDB = JSON.parse('{"' + lockstr.replace(/\n\n/g,'"],"').replace(/:\n/g,'":["').replace(/\n/g,'","') + '"]}');
+		var newDB = JSON.parse('{"' + lockstr.replace(/<br><br>/g,'"],"').replace(/:<br>/g,'":["').replace(/<br>/g,'","') + '"]}');
 		newDB = realNulls(newDB);
 		locDir = sortObject(mergeObjects(locDir,newDB));
 		localStorage[userName] = JSON.stringify(locDir);
@@ -513,7 +513,7 @@ function recryptDB(newKey,newUserName){
 }
 
 //reads old and new Key from boxes and calls recryptDB so locDir is re-encrypted with the new Key
-function changeKey(){
+function acceptnewKey(){
 	if(!fullAccess){
 		optionMsg.textContent = 'Key change not allowed in Guest mode. Please restart PassLok';
 		return
@@ -687,7 +687,7 @@ function resetList(){
     	lockList.options[i].selected = false
   	}
 	setTimeout(function(){
-		var l = lockBox.textContent.length;
+		var l = lockBox.textContent.trim().length;
 		if(l == 0){
 			mainMsg.textContent = 'Nobody selected'
 		}else if(l > 500){

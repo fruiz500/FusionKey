@@ -1,6 +1,5 @@
 ﻿// initialize things
 window.onload = function() {
-
 	if(isMobile){
 		niceEditBtn.style.display = 'none';			//no rich text editing on mobile
 		mainFile.style.display = 'none';
@@ -39,11 +38,11 @@ window.onload = function() {
 	}
 	
   //load field icons
-	showKey.src = eyeImg;
-	showIntroKey.src = eyeImg;
-	showNewKeyCheck.src = eyeImg;
-	showDecoyInCheck.src = eyeImg;
-	showDecoyOutCheck.src = eyeImg;
+	pwdIcon.src = eyeImg;
+	pwdIntroIcon.src = eyeImg;
+	newKeyIcon.src = eyeImg;
+	decoyInIcon.src = eyeImg;
+	decoyOutIcon.src = eyeImg;
 
   //event listeners for buttons etc.
 	window.addEventListener('resize',textheight);
@@ -69,7 +68,7 @@ window.onload = function() {
 
     decodeImgBtn.addEventListener('click', decodeImage);
 
-	imagePwd.addEventListener('keyup', imageKeyup);
+	imageIcon.addEventListener('click',function(){showPwd('image')});
 
 	showLockBtn.addEventListener('click', showLock);
 
@@ -121,7 +120,7 @@ window.onload = function() {
 
    	moveLockDBBtn.addEventListener('click', moveLockDB);
 
-   	acceptKeyBtn.addEventListener('click', acceptKey);
+   	acceptKeyBtn.addEventListener('click', acceptpwd);
 
    	cancelKeyBtn.addEventListener('click', cancelKey);
 
@@ -129,7 +128,7 @@ window.onload = function() {
 
    	changeNameBtn.addEventListener('click', showName);
 
-   	changeKeyBtn.addEventListener('click', changeKey);
+   	changeKeyBtn.addEventListener('click', acceptnewKey);
 
    	changeEmailBtn.addEventListener('click', showEmail);
 
@@ -181,7 +180,7 @@ window.onload = function() {
 
 	spaceMode.addEventListener('click', checkboxStore);
 
-   	showKey.addEventListener('click', showsec);
+	pwdIcon.addEventListener('click',function(){showPwd('pwd')});
 
    	introRandomBtn.addEventListener('click', randomToken);
 
@@ -197,7 +196,7 @@ window.onload = function() {
 
    	cancelNameBtn.addEventListener('click', cancelName);
 
-   	showIntroKey.addEventListener('click', showIntro);
+	pwdIntroIcon.addEventListener('click', function(){showPwd('pwdIntro')});
 
    	clearIntroBtn.addEventListener('click', clearIntro);
 
@@ -205,15 +204,15 @@ window.onload = function() {
 
    	showlockIntroBtn.addEventListener('click', initUser);
 
-   	showDecoyInCheck.addEventListener('click', showDecoyIn);
+	decoyInIcon.addEventListener('click', function(){showPwd('decoyIn')});
 
-   	submitDecoyBtn.addEventListener('click', submitDecoy);
+   	submitDecoyBtn.addEventListener('click', acceptdecoyIn);
 
    	cancelDecoyBtn.addEventListener('click', cancelDecoy);
 
-   	showDecoyOutCheck.addEventListener('click', showDecoyOut);
+	decoyOutIcon.addEventListener('click', function(){showPwd('decoyOut')});
 
-   	submitDecoy2Btn.addEventListener('click', submitDecoy);
+   	submitDecoy2Btn.addEventListener('click', acceptdecoyIn);
 
    	cancelDecoy2Btn.addEventListener('click', cancelDecoy);
 
@@ -239,11 +238,11 @@ window.onload = function() {
 
    	newUserBtn.addEventListener('click', newUser);
 
-   	submitKeyChangeBtn.addEventListener('click', changeKey);
+   	submitKeyChangeBtn.addEventListener('click', acceptnewKey);
 
    	cancelKeyChangeBtn.addEventListener('click', cancelKeyChange);
 
-   	showNewKeyCheck.addEventListener('click', showNewKey);
+	newKeyIcon.addEventListener('click',function(){showPwd('newKey')});
 
 	gotointro2.addEventListener('click', go2intro2);
 
@@ -269,19 +268,19 @@ window.onload = function() {
 
    	chatDate.addEventListener('keyup', charsLeft);
 
-	pwdBox.addEventListener('keyup', function(event) {pwdKeyup(event)}, false);
+	pwdBox.addEventListener('keyup',function(event){boxKeyup('pwd',event)});
 
-   	pwdIntro.addEventListener('keyup', introKeyup);
+	pwdIntroBox.addEventListener('keyup',function(event){boxKeyup('pwdIntro',event)});
 
-	decoyPwdIn.addEventListener('keyup', function(event) {decoyKeyup(event)}, false);
+	decoyInBox.addEventListener('keyup', function(event){boxKeyup('decoyIn',event)});
 
-	decoyPwdOut.addEventListener('keyup', function(event) {decoyKeyupOut(event)}, false);
+	decoyOutBox.addEventListener('keyup', function(event){boxKeyup('decoyOut',event)});
 
 	partsIn.addEventListener('keyup', function(event) {partsKeyup(event)}, false);
 
-	newKey.addEventListener('keyup', newKeyup);
+	newKeyBox.addEventListener('keyup', function(event){boxKeyup('newKey',event)});
 
-	newKey2.addEventListener('keyup', function(event) {newKey2up(event)}, false);
+	newKey2Box.addEventListener('keyup', function(event) {newKey2up(event)}, false);
 
 	lockBox.addEventListener('keyup', function(event) {lockBoxKeyup(event)}, false);
 
@@ -290,6 +289,8 @@ window.onload = function() {
 	userNameBox.addEventListener('keyup', function(event) {nameKeyup(event)}, false);
 
 	emailBox.addEventListener('keyup', function(event) {emailKeyup(event)}, false);
+	
+	imageBox.addEventListener('keyup', function(event){boxKeyup('image',event)});
 
 //for the rich text editor boxes and buttons
 	formatBlock.addEventListener("change", function() {formatDoc('formatBlock',this[this.selectedIndex].value);this.selectedIndex=0;});
@@ -328,15 +329,13 @@ window.onload = function() {
 	}
 
 //fixes after inline styles were moved to css file
-
 	lockList.style.padding = '4px';
 	lockList.style.width = '30%';
 	basicBtnsTop.style.display = 'block';
 	mainMsg.style.minHeight = '20px';
 	extraButtonsTop.style.display = 'none';
 	
-// special initialization for universal extension
-	
+// special initialization for FusionKey extension	
 	sendBtn.addEventListener('click', send2page);					//execute the action
 	
 	if(mainBox.textContent == '') sendBtn.style.visibility = 'hidden';		//hide blinking button if there's nothing to send
@@ -359,39 +358,39 @@ window.onload = function() {
 	
 	failMsg.addEventListener('click', fetchUserId);				//fetch userID anyway and display
 	
-	masterPwd1.addEventListener('keyup', pwdSynthKeyup, false);		//display password strength and execute on Enter
-	masterPwd2.addEventListener('keyup', pwdSynthKeyup, false);
-	masterPwd3.addEventListener('keyup', pwdSynthKeyup, false);
-	masterPwd4.addEventListener('keyup', pwdSynthKeyup, false);
 	userID.addEventListener('keyup', userKeyup, false);
 	
-	masterPwd1.addEventListener('focus', function(){var pwd = masterPwd1.value; if(pwd) keyStrength(pwd,true)}, false);
-	masterPwd2.addEventListener('focus', function(){var pwd = masterPwd2.value; if(pwd) keyStrength(pwd,true)}, false);
-	masterPwd3.addEventListener('focus', function(){var pwd = masterPwd3.value; if(pwd) keyStrength(pwd,true)}, false);
-	masterPwd4.addEventListener('focus', function(){var pwd = masterPwd4.value; if(pwd) keyStrength(pwd,true)}, false);
+	showPwdMode1.addEventListener('click', function(){showSynthPwd('1')});				//toggle visibility of the passwords
+	showPwdMode2.addEventListener('click', function(){showSynthPwd('2')});
+	showPwdMode3.addEventListener('click', function(){showSynthPwd('3')});
+	showPwdMode4.addEventListener('click', function(){showSynthPwd('4')});
 	
-	serial1.addEventListener('focus', function(){lastFocus = '1'},false);		//for storing the correct serial
-	serial2.addEventListener('focus', function(){lastFocus = '2'},false);
-	serial3.addEventListener('focus', function(){lastFocus = '3'},false);
-	serial4.addEventListener('focus', function(){lastFocus = '4'},false);
-	
-	showPwdMode1.addEventListener('click', function(){showPwd('1')});				//toggle visibility of the passwords
-	showPwdMode2.addEventListener('click', function(){showPwd('2')});
-	showPwdMode3.addEventListener('click', function(){showPwd('3')});
-	showPwdMode4.addEventListener('click', function(){showPwd('4')});
+	for(var i = 1; i < 4; i++){
+		document.getElementById('masterPwd' + i.toString()).addEventListener('keyup', pwdSynthKeyup);
+		document.getElementById('masterPwd' + i.toString()).addEventListener('focus', function(){var master = masterPwd1.value; if(master) keyStrength(master,'synth')});
+		document.getElementById('serial' + i.toString()).addEventListener('focus', function(){lastFocus = i.toString()})
+	}
 	
 	okBtnHelp.addEventListener('click', doStuffHelp);								//execute
-	showPwdModeHelp.addEventListener('click', function(){showPwd('Help')});
+	showPwdModeHelp.addEventListener('click', function(){showSynthPwd('Help')});
 	copyBtnHelp.addEventListener('click', copyOutput);
 	
 	masterPwdHelp.addEventListener('keyup', pwdKeyupHelp, false);
-	outputBox.addEventListener('keyup', outputKeyup, false)
+	outputBox.addEventListener('keyup', outputKeyup, false);
 	
 //collect data from content script. Also triggers initialization
-chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
+	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     	activeTab = tabs[0];
 		chrome.tabs.sendMessage(activeTab.id, {message: "start"});
 	});
+	startTimer = setTimeout(function(){											//in case there's no reply from the content script
+		displayPL();
+		if(KeyStr){	
+			key2any();
+			getSettings();
+			pasteMain()
+		}
+	}, 200)	
 };
 
 //for general directory
@@ -415,6 +414,7 @@ initTabs('SPtabs');
 spTab1.className = 'selected';
 mainTabSynth.className = 'tabContent';
 
-var time10 = hashTime10();													//get milliseconds for 10 wiseHash at iter = 10
+//var time10 = hashTime10();													//get milliseconds for 10 wiseHash at iter = 10
+var time10 = 200									//valid for core2 duo. Should be smaller for more recent machines
 
 //end of body script.

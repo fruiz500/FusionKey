@@ -109,6 +109,7 @@ select:focus {
 }
 .message {
 	white-space: pre-line;
+	height: 40px;
 }
 .field-icon {
   margin-left: -30px;

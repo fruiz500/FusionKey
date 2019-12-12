@@ -9,7 +9,7 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	 
 	 //for password function, find passsword fields and others, for reading encrypted material, find stuff between == markers
-    if( request.message === "start" ) {				//find password and text fields and send number of them to frontend, plus host name
+    if( request.message == "start" ) {				//find password and text fields and send number of them to frontend, plus host name
 		pwdId = [];										//global variables  that will be used later
 		textId = [];
 		visibleEditable = [];
@@ -56,7 +56,7 @@ chrome.runtime.onMessage.addListener(
    		chrome.runtime.sendMessage({message: "start_info", host: document.location.host, number: pwdId.length, isUserId: userDone, PLstuff: PLstuff, largeInputs: visibleEditable.length})
     }
 	
-	if( request.message === "clicked_OK" ) {							//insert data coming from frontend into boxes
+	if( request.message == "clicked_OK" ) {							//insert data coming from frontend into boxes
 	 if(request.passwords){
 		var passwords = request.passwords;
 		if(passwords){
@@ -125,12 +125,12 @@ function getPLstuff(text){
 				outStrings.push(sections[i])
 			}else{
 				sections[i] = sections[i].replace(/[\s\n]/g,'');
-				if(!sections[i].match(/[^0-9a-zA-Z+/]/)) outStrings.push(sections[i])			//pure base64, with spaces removed
+				if(!sections[i].match(/[^0-9a-zA-Z+/]/) && sections[i].length > 80) outStrings.push(sections[i])			//pure base64, with spaces removed
 			}
 		}		
 	}else if(words.length > 1){
 		for(var i = 1; i < words.length - 1; i++){
-			if(!words[i].match(/[^0-9a-zA-Z+/]/) && words[i].length > 140) outStrings.push(words[i])
+			if(!words[i].match(/[^0-9a-zA-Z+/]/) && words[i].length > 80) outStrings.push(words[i])
 		}
 	}
 	return outStrings

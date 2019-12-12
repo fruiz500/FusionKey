@@ -3,7 +3,7 @@
   "short_name": "FusionKey",
   "description": "High-security passwords and encryption", 
   "omnibox": { "keyword" : "src" },
-  "version": "0.1.2",
+  "version": "0.1.4",
   "manifest_version": 2,
   "icons": {
   "16": "images/icon16.png",
@@ -24,7 +24,7 @@
         "48": "images/icon48.png",
         "128": "images/icon128.png"
         },
-        "default_title": "FusionPass",
+        "default_title": "FusionKey",
         "default_popup": "index.html"
   },
   "commands": {
