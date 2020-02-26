@@ -48,7 +48,7 @@ function textheight(){
 				mainBox.style.height = fullheight - offsetheight + 'px';
 			}
 		}else{
-			mainBox.style.height = fullheight - offsetheight + 'px';
+			mainBox.style.height = fullheight - offsetheight - 10 + 'px';
 		}
 	}
 }
