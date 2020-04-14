@@ -3,7 +3,7 @@
   "short_name": "FusionKey",
   "description": "High-security passwords and encryption", 
   "omnibox": { "keyword" : "src" },
-  "version": "0.1.5",
+  "version": "0.1.6",
   "manifest_version": 2,
   "icons": {
   "16": "images/icon16.png",
@@ -11,9 +11,9 @@
   "128": "images/icon128.png"
   },
   "permissions": [
-    "storage", "activeTab"
+    "storage"
   ],
-  "content_security_policy": "default-src 'self'; img-src 'self' data:; connect-src 'self' data:; style-src 'self'; frame-src 'self' https://*.passlok.com",
+  "content_security_policy": "default-src 'self'; img-src 'self' data:; connect-src 'self' data:; style-src 'self' 'unsafe-inline'; frame-src 'self' https://*.passlok.com https://passlok.com",
   "background": {
     "scripts": ["background.js"],
     "persistent": false

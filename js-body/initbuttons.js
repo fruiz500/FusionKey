@@ -1,13 +1,9 @@
 ﻿// initialize things
 window.onload = function() {
 	if(isMobile){
-		niceEditBtn.style.display = 'none';			//no rich text editing on mobile
-		mainFile.style.display = 'none';
-		selectMainBtn.style.display = 'none';
 		imgSpacer.style.display = 'none';
 	} else {
-		previewImg.style.width = "80%";					//smaller image on PCs
-		sendSMSBtn.style.display = 'none';
+		previewImg.style.width = "80%"					//smaller image on PCs
 	}
 	if(!isMobile || isChrome){						//search box in Help tab. Works on Android Chrome, but won't detect right
 		helpTopMobile.style.display = 'none';
@@ -307,7 +303,7 @@ window.onload = function() {
 	document.images[5].addEventListener("click", function() {formatDoc('superscript')});
 	document.images[6].addEventListener("click", function() {formatDoc('justifyleft')});
 	document.images[7].addEventListener("click", function() {formatDoc('justifycenter')});
-	document.images[8].addEventListener("click", function() {ormatDoc('justifyright')});
+	document.images[8].addEventListener("click", function() {formatDoc('justifyright')});
 	document.images[9].addEventListener("click", function() {formatDoc('justifyfull')});
 	document.images[10].addEventListener("click", function() {formatDoc('insertorderedlist')});
 	document.images[11].addEventListener("click", function() {formatDoc('insertunorderedlist')});
