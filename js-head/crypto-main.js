@@ -805,7 +805,7 @@ function Decrypt_Single(type,cipherStr,lockBoxHTML){
 			if(!reply) return
 		}
 		if(!refreshKey()) return;					
-		lockBox.innerHTML = safeHTML(keyDecrypt(cipherStr));			//decryption step of internal data. Must use innerHTML to preserve linefeeds
+		lockBox.innerHTML = decryptSanitizer(keyDecrypt(cipherStr));			//decryption step of internal data. Must use innerHTML to preserve linefeeds
 		if(!lockBox.innerHTML) return;
 
 		if(lockBox.textContent.trim().slice(0,6) == 'myself'){		//string contains settings; add them after confirmation
@@ -849,9 +849,9 @@ function Decrypt_Single(type,cipherStr,lockBoxHTML){
 		if(!plain) return false;	
 
 		if(isCompressed){
-			mainBox.innerHTML = safeHTML(plain.trim())					//make sure non-allowed tags and attributes are disabled
+			mainBox.innerHTML = decryptSanitizer(plain.trim())					//make sure non-allowed tags and attributes are disabled
 		}else{
-			mainBox.innerHTML = safeHTML(decodeURI(plain).trim())
+			mainBox.innerHTML = decryptSanitizer(decodeURI(plain).trim())
 		}
 		mainMsg.textContent = 'Decryption successful';
 																		//additional text to accompany an invitation
@@ -889,9 +889,9 @@ function Decrypt_Single(type,cipherStr,lockBoxHTML){
 		if(!plain) return false;
 
 		if(isCompressed){
-			mainBox.innerHTML = safeHTML(plain.trim())
+			mainBox.innerHTML = decryptSanitizer(plain.trim())
 		}else{
-			mainBox.innerHTML = safeHTML(decodeURI(plain).trim())
+			mainBox.innerHTML = decryptSanitizer(decodeURI(plain).trim())
 		}
 		mainMsg.textContent = 'Decryption successful'
 
@@ -912,9 +912,9 @@ function Decrypt_Single(type,cipherStr,lockBoxHTML){
 		if(!plain) return false;
 
 		if(isCompressed){
-			mainBox.innerHTML = safeHTML(plain.trim())
+			mainBox.innerHTML = decryptSanitizer(plain.trim())
 		}else{
-			mainBox.innerHTML = safeHTML(decodeURI(plain).trim())
+			mainBox.innerHTML = decryptSanitizer(decodeURI(plain).trim())
 		}
 		mainMsg.textContent = 'Decryption successful'
 
@@ -1021,9 +1021,9 @@ function Decrypt_Single(type,cipherStr,lockBoxHTML){
 		if(!plain) return false;
 
 		if(isCompressed){
-			mainBox.innerHTML = safeHTML(plain.trim())
+			mainBox.innerHTML = decryptSanitizer(plain.trim())
 		}else{
-			mainBox.innerHTML = safeHTML(decodeURI(plain).trim())
+			mainBox.innerHTML = decryptSanitizer(decodeURI(plain).trim())
 		}
 
 		locDir[name][2] = keyEncrypt(newLock);										//store the new ephemeral Lock
@@ -1288,7 +1288,7 @@ function Decrypt_List(type,cipherStr){
 	//final decryption for the main message, plus decompression
 	var plainstr = PLdecrypt(cipher,nonce24,msgKey,true);
 	if(!plainstr) return false;
-	mainBox.innerHTML = safeHTML(plainstr);											//non-whitelisted tags and attributes disabled
+	mainBox.innerHTML = decryptSanitizer(plainstr);											//non-whitelisted tags and attributes disabled
 
 	if(fullAccess) localStorage[userName] = JSON.stringify(locDir);				//everything OK, so store
 	if (!decoyMode.checked){
@@ -1336,6 +1336,6 @@ function decoyDecrypt(cipher,dummyLock){
 		plain = nacl.secretbox.open(cipherMsg,nonce24,sharedKey);
 		if(!plain){failedDecrypt('decoy')	;return}										//now give up
 	}
-	mainMsg.textContent = 'Hidden message: ' + safeHTML(decodeURI(nacl.util.encodeUTF8(plain)));
+	mainMsg.textContent = 'Hidden message: ' + decodeURI(nacl.util.encodeUTF8(plain));
 	return true
 }

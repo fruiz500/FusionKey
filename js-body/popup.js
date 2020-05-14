@@ -53,7 +53,8 @@ chrome.runtime.onMessage.addListener(
 						row4.style.display = '';
 					}else if(pwdNumber >= 5){		//too many boxes
 						pwdTable.style.display = 'none';
-						okBtn.style.display = 'none';
+						okBtnSynth.style.display = 'none';
+						clipbdBtn.style.display = 'none';
 						synthMsg.textContent = "Too many password fields. Try filling them manually";
 					}
 				}	  
@@ -211,7 +212,7 @@ retrieveKeys();
 var websiteName, pwdNumber = 0, hasInputBoxes, cryptoStr = '';
 
 //gets executed with the OK button
-function doSynth(e) {
+function doSynth(clipOn) {
 	var pwdStr1 = masterPwd1.value.trim(),			//get passwords and serials
 		serialStr1 = serial1.value.trim(),
 		pwdStr2 = masterPwd2.value.trim(),
@@ -259,6 +260,8 @@ function doSynth(e) {
 				newPwd = pwdSynth(1,pwdStr1,serialStr1,isPin,isAlpha);
 			if(!newPwd) return;								//bail out if just erasing stored password
 			pwdOut.push(newPwd.slice(0,lengthStr));
+
+			if(clipOn) copyStr(newPwd.slice(0,lengthStr));	//copy this one to clipboard if so directed
 	
 	//fill missing inputs and compute the rest of the passwords
 			if(pwdNumber > 1){
@@ -561,4 +564,15 @@ function pwdKeyupHelp(evt){
 //displays output password length
 function outputKeyup(){
 	helpMsg.textContent = "Output is " + outputBox.textContent.length + " characters long"
+}
+
+//for copying the result to clipboard. Uses invisible input element.
+function copyStr(string){
+	var box = document.createElement('textarea');
+	box.value = string;
+	document.body.appendChild(box);
+	box.focus();
+	box.select();
+	document.execCommand('copy');
+	document.body.removeChild(box)
 }

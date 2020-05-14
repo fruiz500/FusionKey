@@ -344,11 +344,13 @@ window.onload = function() {
 	}
 	
 //SynthPass interface button listeners
-	okBtnSynth.addEventListener('click', doSynth);					//execute the action
+	okBtnSynth.addEventListener('click', function(){doSynth(false)});					//execute the action
 	okBtnSynth.style.display = 'none';	
 	row2.style.display = 'none';
 	row3.style.display = 'none';
 	row4.style.display = 'none';
+
+	clipbdBtn.addEventListener('click', function(){doSynth(true)});			//same as above, but set a flag so result is copied to clipboard as well
 
 	cancelBtnSynth.addEventListener('click', function(){window.close()});		//quit
 	
@@ -377,7 +379,10 @@ window.onload = function() {
 //collect data from content script. Also triggers initialization
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     	activeTab = tabs[0];
-		chrome.tabs.sendMessage(activeTab.id, {message: "start"});
+//		inject content script programmatically
+		chrome.tabs.executeScript({
+			file: 'content.js'
+		});
 	});
 	startTimer = setTimeout(function(){											//in case there's no reply from the content script
 		displayPL();
