@@ -1,13 +1,9 @@
 ﻿// initialize things
 window.onload = function() {
 	if(isMobile){
-		niceEditBtn.style.display = 'none';			//no rich text editing on mobile
-		mainFile.style.display = 'none';
-		selectMainBtn.style.display = 'none';
 		imgSpacer.style.display = 'none';
 	} else {
-		previewImg.style.width = "80%";					//smaller image on PCs
-		sendSMSBtn.style.display = 'none';
+		previewImg.style.width = "80%"					//smaller image on PCs
 	}
 	if(!isMobile || isChrome){						//search box in Help tab. Works on Android Chrome, but won't detect right
 		helpTopMobile.style.display = 'none';
@@ -307,7 +303,7 @@ window.onload = function() {
 	document.images[5].addEventListener("click", function() {formatDoc('superscript')});
 	document.images[6].addEventListener("click", function() {formatDoc('justifyleft')});
 	document.images[7].addEventListener("click", function() {formatDoc('justifycenter')});
-	document.images[8].addEventListener("click", function() {ormatDoc('justifyright')});
+	document.images[8].addEventListener("click", function() {formatDoc('justifyright')});
 	document.images[9].addEventListener("click", function() {formatDoc('justifyfull')});
 	document.images[10].addEventListener("click", function() {formatDoc('insertorderedlist')});
 	document.images[11].addEventListener("click", function() {formatDoc('insertunorderedlist')});
@@ -348,11 +344,13 @@ window.onload = function() {
 	}
 	
 //SynthPass interface button listeners
-	okBtnSynth.addEventListener('click', doSynth);					//execute the action
+	okBtnSynth.addEventListener('click', function(){doSynth(false)});					//execute the action
 	okBtnSynth.style.display = 'none';	
 	row2.style.display = 'none';
 	row3.style.display = 'none';
 	row4.style.display = 'none';
+
+	clipbdBtn.addEventListener('click', function(){doSynth(true)});			//same as above, but set a flag so result is copied to clipboard as well
 
 	cancelBtnSynth.addEventListener('click', function(){window.close()});		//quit
 	
@@ -381,7 +379,11 @@ window.onload = function() {
 //collect data from content script. Also triggers initialization
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     	activeTab = tabs[0];
-		chrome.tabs.sendMessage(activeTab.id, {message: "start"});
+//		inject content script programmatically
+		chrome.tabs.executeScript({
+			file: "/content.js",
+			allFrames: true
+		});
 	});
 	startTimer = setTimeout(function(){											//in case there's no reply from the content script
 		displayPL();
