@@ -3,7 +3,7 @@
   "short_name": "FusionKey",
   "description": "High-security passwords and encryption", 
   "omnibox": { "keyword" : "src" },
-  "version": "0.1.6.1",
+  "version": "0.1.7",
   "manifest_version": 2,
   "icons": {
   "16": "images/icon16.png",

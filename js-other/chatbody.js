@@ -5,7 +5,7 @@ window.onload = function() {
 	
 	pageResize();
 	
-	chatFrame.src = 'https://www.passlok.com/chat2/index.html' + location.hash;
+	chatFrame.src = 'https://www.passlok.com/chat/chat.html' + location.hash;
 }
 
 //resizes iframe to fit the browser

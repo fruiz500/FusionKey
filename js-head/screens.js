@@ -727,10 +727,6 @@ function loadLockDir(){
 
 //loads the chat in  a separate window (special for FusionKey extension)
 function main2chat(token){
-	if(isAndroid && isChrome){
-		var reply = confirm('On Android, the chat function works from a browser page, but not yet from the app. Please cancel if you are running PassLok as a native app.');
-		if(!reply) return
-	}
 	chrome.runtime.sendMessage({newtab: "chatTab", typetoken: token}, function (response) {
 		console.log(response.farewell);
 	});

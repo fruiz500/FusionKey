@@ -539,7 +539,7 @@ function doStuffHelp(e) {
 	
 	setTimeout(function(){														//the rest after a 10 ms delay
 		helpMsg.textContent = "Password synthesized. Copy it now";
-		outputBox.textContent = pwdSynth(pwdStr,serialStr,isPin,isAlpha).slice(0,lengthStr);
+		outputBox.textContent = pwdSynth(0,pwdStr,serialStr,isPin,isAlpha).slice(0,lengthStr);
 		masterPwdHelp.value = '';
 		siteName.value = '';
 		websiteName = '';
@@ -554,7 +554,7 @@ function pwdKeyupHelp(evt){
 	var key = evt.keyCode || evt.which || evt.keyChar;
 	if(key == 13){doStuffHelp()} else{
 		 if(masterPwdHelp.value){
-			 keyStrength(masterPwdHelp.value,true,true)
+			 keyStrength(masterPwdHelp.value,'help')
 		 }else{
 			 helpMsg.textContent = "Please enter the Master Key"
 		 }

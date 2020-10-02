@@ -381,7 +381,8 @@ window.onload = function() {
     	activeTab = tabs[0];
 //		inject content script programmatically
 		chrome.tabs.executeScript({
-			file: 'content.js'
+			file: "/content.js",
+			allFrames: true
 		});
 	});
 	startTimer = setTimeout(function(){											//in case there's no reply from the content script
