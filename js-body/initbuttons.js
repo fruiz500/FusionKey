@@ -407,7 +407,7 @@ function receiveMessage(evt){
   	}
 }
 
-if(!localStorage){newUser();}else if(localStorage.length == 0){newUser();};
+if(!localStorage){newUser();}else if(localStorage.length == 0){newUser();}else if(localStorage.length == 1 && localStorage['randid']){newUser();};
 
 fillNameList();
 
