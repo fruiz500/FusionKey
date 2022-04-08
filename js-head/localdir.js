@@ -639,7 +639,7 @@ function fillBox(){
 				isList = true;											//to return here if the Key is wrong
 				var nextItem = keyDecrypt(itemcrypt);
 				if(!nextItem) return;
-				list += '\r\n' + nextItem
+				list += '<br>' + nextItem
 			}else if(lockList.options[i].value == 'default'){					//default cover selected
 				var covername = 'default';
 				newCover(defaultCoverText)
@@ -651,12 +651,12 @@ function fillBox(){
 				if(!cover2) return;
 				newCover(LZString.decompressFromBase64(cover2))
 			}else{
-         		list += '\r\n' + lockList.options[i].value
+         		list += '<br>' + lockList.options[i].value
 			}
     	}
   	}
-	list = list.replace(/\r\n/i,'');										//remove the first linefeed
-	var array = list.split('\r\n');
+	list = list.replace(/<br>/i,'');										//remove the first linefeed
+	var array = list.split('<br>');
 	if(array[0] != ''){
 		array = array.filter(function(elem, pos, self) {return self.indexOf(elem) == pos;});  			//remove duplicates
 		array = array.filter(function(n){return n});													//remove nulls
@@ -664,10 +664,10 @@ function fillBox(){
 		list = '';
 		var msg = 'Encrypting for: ';
 		for(var index = 0; index < array.length; index++){
-			list += '\r\n' + array[index];
+			list += '<br>' + array[index];
 			msg += array[index] + ', '
 		}
-		lockBox.textContent = list.replace(/\r\n/i,'').trim();				//remove first linefeed
+		lockBox.innerHTML = list.replace(/<br>/i,'').trim();				//remove first linefeed
 	}else if(covername){
 		var msg = covername + ' Cover text loaded'
 	}else{
@@ -705,7 +705,7 @@ function fillNameList(){
 	var list = [];
 	for(var name in localStorage){
 			//this if is because of a bug in Firefox
-		if(name != 'clear' && name != 'getItem' && name != 'key' && name!= 'length' && name != 'removeItem' && name != 'setItem'){
+		if(name != 'clear' && name != 'getItem' && name != 'key' && name!= 'length' && name != 'removeItem' && name != 'setItem' && name != 'randid'){
 			//and this, because of a bug in Safari
 			if(!name.match('com.apple.WebInspector') && name != 'locDir'){
 				list = list.concat(removeHTMLtags(name))
