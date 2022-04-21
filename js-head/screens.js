@@ -99,6 +99,7 @@ function updateButtons(){
 	}else{
 		secretShareBtn.textContent = 'Split'
 	}
+	if(string.includes('href="data:')){sendSMSBtn.textContent = "Save"}else{sendSMSBtn.textContent = "SMS"}
 }
 
 //gets recognized type of string, if any, otherwise returns false. Also returns cleaned-up string
@@ -687,42 +688,6 @@ function image2main(){
 		openClose('shadow');
 		focusBox()
 	}
-}
-
-//go to general directory frame
-function lock2dir(){
-	if(learnMode.checked){
-		var reply = confirm("The General Directory will open so you can find or post a Lock.\nWARNING: this involves going online, which might leak metadata. Cancel if this is not what you want.");
-		if(!reply) return
-	}
-	if(keyScr.style.display == 'block') return;
-
-	loadLockDir();
-	var locklength = stripTags(removeHTMLtags(mainBox.textContent)).length;
-	if ((locklength == 43 || locklength == 50) && lockdirScr.style.display != "block"){
-
-//if populated, send Lock to General Directory
-		var frame = document.getElementById('lockdirFrame');
-		frame.contentWindow.postMessage(removeHTMLtags(mainBox.innerHTML.replace(/\&nbsp;/g,'')), 'https://www.passlok.com');			//no formatting
-		frame.onload = function() {
-	    	frame.contentWindow.postMessage(removeHTMLtags(mainBox.innerHTML.replace(/\&nbsp;/g,'')), 'https://www.passlok.com');		//so that the Lock directory gets the Lock, too
-		}
-		lockdirScr.style.display = "block";
-		return
-	}
-	openClose('lockdirScr');
-	focusBox()
-}
-
-//return from general directory frame
-function dir2any(){
-	openClose('lockdirScr');
-	focusBox()
-}
-
-//to load general Lock directory only once
-function loadLockDir(){
-	if(document.getElementById('lockdirFrame').src != 'https://www.passlok.com/lockdir') document.getElementById('lockdirFrame').src = 'https://www.passlok.com/lockdir'
 }
 
 //loads the chat in  a separate window (special for FusionKey extension)

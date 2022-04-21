@@ -100,8 +100,6 @@ window.onload = function() {
 
    	image2mainBtn.addEventListener('click', image2main);
 
-   	lock2dirBtn.addEventListener('click', lock2dir);
-
    	clearLocksBtn.addEventListener('click', clearLocks);
 
    	addLockBtn.addEventListener('click', function(){addLock(false)});
@@ -316,6 +314,7 @@ window.onload = function() {
 	document.images[18].addEventListener("click", function() {formatDoc('removeFormat')});
 	document.images[19].addEventListener("click", function() {formatDoc('undo')});
 	document.images[20].addEventListener("click", function() {formatDoc('redo')});
+	document.images[23].addEventListener("click", saveFiles);
 
 //for the help screens
 	var helpHeaders = document.getElementsByClassName("helpHeading");		//add listeners to all the help headers

@@ -36,7 +36,7 @@
 <!--lz-string compression algorithm 1.4.4. https://github.com/pieroxy/lz-string-->
 <script src="js-opensrc/lz-string.js"></script>
 
-<!--DOMPurify, used to sanitize decrypted material before putting in DOM v2.3.0. https://github.com/cure53/DOMPurify-->
+<!--DOMPurify, used to sanitize decrypted material before putting in DOM v2.3.6. https://github.com/cure53/DOMPurify-->
 <script src="js-opensrc/purify.js"></script>
 
 <!--jpeg image steganography by Owen Campbell-Moore and others. https://github.com/owencm/js-steg. First jsstegencoder-1.0.js-->
@@ -228,6 +228,7 @@
 <img class="intLink" title="Load a file" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAATlBMVEUAAAAAAAD19fVcXFwbGxsTExP8/PzT09NxcXFaWlo4ODg1NTUEBAT5+fnw8PDr6+vU1NTIyMi+vr6Xl5dsbGxnZ2dXV1dISEghISEMDAw0f0rSAAAAAXRSTlMAQObYZgAAAFBJREFUGNO9yEkOgCAQBMBmUxDc9/9/VJ2EjgkHb9axcJuceqQRtMq4aAdWkDr6xtW5jJRFx2MBu23fdS7eG6Vz0U8VytrKmhMnVoDQlOfbBQLIAl4FF2fyAAAAAElFTkSuQmCC" />
 </label>
 <input type="file" id="mainFile"/>
+<img class="intLink" title="Download files" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABYAAAAWCAMAAADzapwJAAAAdVBMVEUAAAAfHx9GRkYAAAAPDw9aWlr+/v739/fHx8dpaWkEBAT7+/v29vby8vLu7u7Z2dm1tbWysrKtra2qqqqMjIxWVlZJSUk1NTUUFBQJCQnz8/Pq6uri4uLMzMzKysq+vr69vb2NjY16enpvb29hYWE9PT0rKytDpsqlAAAAAXRSTlMAQObYZgAAAHdJREFUGNO1zscOgCAMgGG0iIp77z3e/xEV05CoJJ78D9B86aHkO6bUuXBUnFWuig1q/sTs5PclyR7YpZ+vD+4rrSg3mJ7rFgWA9EZhcPmlbuyh1mCLr0vEO0CI7HPB2AgRTh43mORYMstBk3HaEqxZdFlmkZ87AICHBL2TAUCPAAAAAElFTkSuQmCC" />
 </div>
   </div>
   <div id="mainBox" contenteditable="true" class="cssbox" accesskey=";" placeholder="Write or paste your message here. You can use nice formatting and add images and files if you click Rich. To encrypt or decrypt, select the correspondents in the top box, then click the button. Add more correspondents by pasting their Locks in this box."></div>
@@ -680,7 +681,7 @@
     <h3>Load files to be encrypted, sealed, or split</h3>
   </div>
   <div id="a19" class="helpItem">
-    <p>1. The button to load files is the rightmost one on the formatting toolbar, which is displayed by clicking the <strong>Rich</strong> button. It looks like this: <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAATlBMVEUAAAAAAAD19fVcXFwbGxsTExP8/PzT09NxcXFaWlo4ODg1NTUEBAT5+fnw8PDr6+vU1NTIyMi+vr6Xl5dsbGxnZ2dXV1dISEghISEMDAw0f0rSAAAAAXRSTlMAQObYZgAAAFBJREFUGNO9yEkOgCAQBMBmUxDc9/9/VJ2EjgkHb9axcJuceqQRtMq4aAdWkDr6xtW5jJRFx2MBu23fdS7eG6Vz0U8VytrKmhMnVoDQlOfbBQLIAl4FF2fyAAAAAElFTkSuQmCC" /></p>
+    <p>1. The button to load files is near the right end of the formatting toolbar, which is displayed by clicking the <strong>Rich</strong> button. It looks like this: <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABIAAAASCAMAAABhEH5lAAAATlBMVEUAAAAAAAD19fVcXFwbGxsTExP8/PzT09NxcXFaWlo4ODg1NTUEBAT5+fnw8PDr6+vU1NTIyMi+vr6Xl5dsbGxnZ2dXV1dISEghISEMDAw0f0rSAAAAAXRSTlMAQObYZgAAAFBJREFUGNO9yEkOgCAQBMBmUxDc9/9/VJ2EjgkHb9axcJuceqQRtMq4aAdWkDr6xtW5jJRFx2MBu23fdS7eG6Vz0U8VytrKmhMnVoDQlOfbBQLIAl4FF2fyAAAAAElFTkSuQmCC" /></p>
     <p>2. When you click it, a dialog will appear so you can navigate to the file. If all goes well, the file loads into the box as a link. You will see only its name, but the whole file is actually in there.</p>
     <p>Now you can encrypt it, seal it, or split it just like a text-based message. You can also add more files if you want. The process to retrieve the original files is explained in the help item below.</p>
     <p>This and more is explained in this video tutorial (warning: watching it may leak your IP number): <a href="https://www.youtube.com/watch?v=tPeUv6BRTrg" target="_blank">https://www.youtube.com/watch?v=tPeUv6BRTrg</a></p>
@@ -698,14 +699,15 @@
     <h3>Retrieve a file that has just been decrypted, unsealed, of joined</h3>
   </div>
   <div id="a20" class="helpItem">
-    <p>1. Make sure the file appears as a link on the Main box.</p>
-    <p>2. Right-click on it and select the <strong>Save link as</strong> option. The file will be saved at the location you select.</p>
-    <p>If there are several file links, repeat the process for each one. This and more is explained in this video tutorial (warning: watching it may leak your IP number): <a href="https://www.youtube.com/watch?v=tPeUv6BRTrg" target="_blank">https://www.youtube.com/watch?v=tPeUv6BRTrg</a></p>
+	<p>1. Make sure the file appears as a link on the Main box.</p>
+    <p>2. A button below the Main box will be labeled <strong>Save</strong>. Click it to download all the files in the Main box. You can also use the rightmost button on the toolbar.</p>
+    <p>3. For small enough files, you can also right-click on its link and select the <strong>Save link as</strong> option. The file will be saved at the location you select.</p>
+    <p>This and more is explained in this video tutorial (warning: watching it may leak your IP number): <a href="https://www.youtube.com/watch?v=tPeUv6BRTrg" target="_blank">https://www.youtube.com/watch?v=tPeUv6BRTrg</a></p>
     <div id='bb20' class="helpHeading">
       <p><em>Click here for More:</em></p>
     </div>
     <div id="b20" class="helpItem">
-      <p>Chrome will not display the <strong>Save link as</strong> option if the file is larger than 1.5MB. Use Firefox in this case.</p>
+      <p>Chrome does not display the <strong>Save link as</strong> option if the file is larger than 1.5MB.</p>
     </div>
   </div>
     <hr>
@@ -1544,18 +1546,17 @@
     <p><strong>Notice:</strong> Since PassLok is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of PassLok, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>PassLok contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using PassLok.</p>
     <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 0.1.8 (August 2021) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 0.1.9 (April 2022) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  FusionKey v0.1.8 based on PassLok v2.4.20 &#169; F. Ruiz 2021
+  FusionKey v0.1.9 based on PassLok v2.5.1 &#169; F. Ruiz 2021
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
     <li> tweetNaCl JavaScript implementation by D. Chestnykh and D. Mandiri 2015</li>
-    <li> general directory by W. Huang 2014</li>
-    <li> DOMPurify XSS sanitizer by cure53 2020</li>
+    <li> DOMPurify XSS sanitizer by cure53 2022</li>
     <li> Shamir secret sharing by A. Stetsyuk 2013</li>
     <li> image steganography based on F5 by Andreas Westfeld 2001</li>
     <li> jpeg image hiding libraries js-steg by Owen Campbell-Moore et al. 2014</li>
@@ -1578,7 +1579,6 @@
 <div id="lockScr" class="white_content" align="center">
   <div id="locktop" align="center">
     <button class="cssbutton" id="lock2mainBtn" value="< Back" title="return to main screen (alt-E)" accesskey="">&#9668; Done</button>
-    <button class="cssbutton" id="lock2dirBtn" value="Directory" title="open a screen containing the general PassLok directory (alt-G). WARNING: this involves going online, which might leak metadata" accesskey="g">&#9658; General Directory</button>
     <br>
     <br>
     <br>
@@ -1873,14 +1873,6 @@
 
 <!--Shadow backdrop-->
 <div id="shadow" class="black_overlay"> </div>
-
-<!--General Directory screen, just an iframe for https://www.passlok.com/lockdir-->
-<div id="lockdirScr" class="block_page" align="center">
-  <div id="lockdirContent">
-    <button class="cssbutton" id="closeLockdirBtn" value="< Back" title="returns to Locks screen">&#9668; Back to PassLok</button>
-    <iframe seamless id="lockdirFrame" src="" border=0 frameborder=0> </iframe>
-  </div>
-</div>
 
 <!--End of PassLok interface-->
 </div>

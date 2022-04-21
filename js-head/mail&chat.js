@@ -38,12 +38,16 @@ function makeInvitation(){
 
 //calls texting app
 function sendSMS(){
-	if(learnMode.checked){
-		var reply = confirm("The default texting app will now open. You need to have copied your short encrypted message to the clipboard before doing this, if you want to send one. This only works on smartphones. Cancel if this is not what you want.");
-		if(!reply) return
-	}
-	selectMain();
-	window.open("SMS:","_parent")
+    if(learnMode.checked){
+        var reply = confirm("The default texting app will now open. You need to have copied your short encrypted message to the clipboard before doing this, if you want to send one. This only works on smartphones. Cancel if this is not what you want.");
+        if(!reply) return
+    }
+    if(sendSMSBtn.textContent == 'Save'){
+        saveFiles()
+    }else{
+        selectMain();
+        window.open("SMS:","_parent")
+    }
 }
 
 //decrypts a chat invite if found, then opens chat screen, otherwise makes one
