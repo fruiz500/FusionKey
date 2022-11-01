@@ -114,31 +114,6 @@ chrome.runtime.onMessage.addListener(
 			}
 		}
 
-	}else if(request.message == "keys_fromBg"){			//get cached keys from background
-		if(request.KeyStr){
-			KeyStr = request.KeyStr;
-			KeySgn = new Uint8Array(32);				    //must be Uint8Array type
-			for(var i = 0; i < 32; i++) KeySgn[i] = request.KeySgn[i];
-			KeyDH = new Uint8Array(32);				    //must be Uint8Array type
-			for(var i = 0; i < 32; i++) KeyDH[i] = request.KeyDH[i];
-			KeyDir = new Uint8Array(32);				    //must be Uint8Array type
-			for(var i = 0; i < 32; i++) KeyDir[i] = request.KeyDir[i];
-			myLock = new Uint8Array(32);
-			for(var i = 0; i < 32; i++) myLock[i] = request.myLock[i];
-			myLockStr = request.myLockStr;
-			myezLock = request.myezLock;
-			myEmail = request.myEmail;
-			userName = request.userName;
-			locDir = request.locDir
-		}
-				
-	}else if(request.message == "master_fromBg"){		//same for SynthPass master Password
-		if(request.masterPwd){
-			masterPwd = request.masterPwd;
-			masterPwd1.value = masterPwd;
-			showPwdMode1.style.display = 'none'
-		}
-
 	}else if(request.message == "delete_keys"){			//delete cached keys
 		masterPwd = '';
 		KeyStr = '';
@@ -184,24 +159,56 @@ chrome.runtime.onMessage.addListener(
 
 function preserveMaster(){
 	if(masterPwd){
-		chrome.runtime.sendMessage({message: "reset_timer"});			//reset auto timer on background page
-		chrome.runtime.sendMessage({message: "preserve_master", masterPwd: masterPwd})
+		chrome.storage.session.set({"masterPwd": masterPwd});
+		chrome.alarms.create("FKAlarm",						//to delete all in session storage after 5 minutes
+			{"delayInMinutes": 5}
+		);
 	}
 }
 
 function preserveKeys(){
 	if(KeyStr){
-		chrome.runtime.sendMessage({message: "reset_timer"});			//reset auto timer on background page
-		chrome.runtime.sendMessage({message: 'preserve_keys', KeyStr: KeyStr, KeySgn: KeySgn, KeyDH: KeyDH, KeyDir: KeyDir, myEmail: myEmail, myLock: myLock, myLockStr: myLockStr, myezLock: myezLock, userName: userName, locDir: locDir});
+		chrome.storage.session.set({"KeyStr": KeyStr});
+		if(KeySgn) chrome.storage.session.set({"KeySgn": JSON.stringify(Array.from(KeySgn))});
+		if(KeyDH) chrome.storage.session.set({"KeyDH": JSON.stringify(Array.from(KeyDH))});
+		if(KeyDir) chrome.storage.session.set({"KeyDir": JSON.stringify(Array.from(KeyDir))});
+		if(myEmail) chrome.storage.session.set({"myEmail": myEmail});
+		if(myLock) chrome.storage.session.set({"myLock": JSON.stringify(Array.from(myLock))});
+		if(myLockStr) chrome.storage.session.set({"myLockStr": myLockStr});
+		if(myezLock) chrome.storage.session.set({"myezLock": myezLock});
+		if(locDir) chrome.storage.session.set({"locDir": JSON.stringify(locDir)});
+		if(userName) chrome.storage.session.set({"userName": userName});
+		chrome.alarms.create("FKAlarm",
+			{"delayInMinutes": 5}
+		);
 	}
 }
 
 function retrieveMaster(){
-	chrome.runtime.sendMessage({message: 'retrieve_master'})
+	let gettingPwd = chrome.storage.session.get("masterPwd");
+	gettingPwd.then(function(result){
+		if(result["masterPwd"]){
+			masterPwd = result["masterPwd"];
+			masterPwd1.value = masterPwd;
+			showPwdMode1.style.display = 'none'
+		}
+	})
 }
 
 function retrieveKeys(){
-	chrome.runtime.sendMessage({message: 'retrieve_keys'})
+	let gettingKeys = chrome.storage.session.get();
+	gettingKeys.then(function(result){
+		if(result["KeyStr"]) KeyStr = result["KeyStr"];
+		if(result["myLockStr"]) myLockStr = result["myLockStr"];
+		if(result["myezLock"]) myezLock = result["myezLock"];
+		if(result["myEmail"]) myEmail = result["myEmail"];
+		if(result["userName"]) userName = result["userName"];
+		if(result["locDir"]) locDir = JSON.parse(result["locDir"]);
+		if(result["KeySgn"]) KeySgn = new Uint8Array(JSON.parse(result["KeySgn"]));
+		if(result["KeyDH"]) KeyDH = new Uint8Array(JSON.parse(result["KeyDH"]));
+		if(result["KeyDir"]) KeyDir = new Uint8Array(JSON.parse(result["KeyDir"]));
+		if(result["myLock"]) myLock = new Uint8Array(JSON.parse(result["myLock"]))
+	})
 }
 
 //now that the receiving code is in place, begin by retrieving data stored in background page

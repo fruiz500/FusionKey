@@ -214,8 +214,6 @@ window.onload = function() {
 
    	cancelPartsBtn.addEventListener('click', cancelPartsIn);
 
-	closeLockdirBtn.addEventListener('click', lock2dir);
-
    	submitChatBtn.addEventListener('click', makeChat);
 
 	lockList.addEventListener('change', fillBox);
@@ -379,9 +377,9 @@ window.onload = function() {
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     	activeTab = tabs[0];
 //		inject content script programmatically
-		chrome.tabs.executeScript({
-			file: "/content.js",
-			allFrames: true
+		chrome.scripting.executeScript({
+			target: {tabId: activeTab.id, allFrames: true},
+			files: ["/content.js"]
 		});
 	});
 	startTimer = setTimeout(function(){											//in case there's no reply from the content script

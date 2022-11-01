@@ -209,7 +209,7 @@ function lockBtnAction(){
 	}else if(!!lockBoxHTML){												//recipients selected: encrypt
 		lock(lockBoxHTML,array[1]);
 //		setTimeout(function(){
-//			if(emailMode.checked) sendMail()								//no Email function in universal extension
+//			if(emailMode.checked) sendMail()								//no Email function in FusionKey
 //		},50)
 	}else{
 		makeInvitation()															//no recipients: invite
@@ -814,7 +814,7 @@ function openHelp(theID){
 	}
 }
 
-<!--variables and functions for making tabs, by Matt Doyle 2009-->
+//variables and functions for making tabs, by Matt Doyle 2009
 var tabLinks = new Array(),
 	contentDivs = new Array();
 
