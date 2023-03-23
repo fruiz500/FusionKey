@@ -10,7 +10,7 @@ body {
 	background-color: #FFFFFF;
 	color: #000000;
 	width: 800px;
-	height: ;
+	height: 800px;
 }
 input:focus {
     outline: none !important;
@@ -55,6 +55,8 @@ select:focus {
 	z-index: 1002;
 	overflow: auto;
 	background-color: white;
+	text-align: center;
+	margin: auto;
 }
 .block_page {
 	display: none;
@@ -68,6 +70,19 @@ select:focus {
 	z-index: 1002;
 	overflow: auto;
 	background-color: white;
+	margin: auto;
+}
+.centered {
+	text-align: center;
+	margin: auto;
+}
+.left {
+	text-align: left;
+	margin: auto;
+}
+.borderless {
+	border: 0;
+	margin: 0;
 }
 .cssbutton {
 	-webkit-border-radius: 10px;
@@ -94,12 +109,13 @@ select:focus {
 	padding: 5px;
 	text-decoration: none;
 	width: 100%;
-	-webkit-appearance: none;
 	box-sizing: border-box;
 	-webkit-box-sizing: border-box;
 	-moz-box-sizing: border-box;
+	box-sizing: border-box;
 	-webkit-box-shadow: none;
 	-moz-box-shadow: none;
+	box-shadow: none;
 	box-shadow: none;
 	color: #000000;
 	background: #fffff5;
@@ -212,6 +228,7 @@ input[type=checkbox] {
 	-moz-transform: scale(1.7); /* FF */
 	-webkit-transform: scale(1.7); /* Safari and Chrome */
 	-o-transform: scale(1.7); /* Opera */
+	transform: scale(1.7);
 	padding: 0px;
 	cursor: pointer;
 	border: 1px solid #dedede;
@@ -222,6 +239,7 @@ input[type=radio] {
 	-moz-transform: scale(1.7); /* FF */
 	-webkit-transform: scale(1.7); /* Safari and Chrome */
 	-o-transform: scale(1.7); /* Opera */
+	transform: scale(1.7);
 	padding: 0px;
 	cursor: pointer;
 	border: 1px solid #dedede;
@@ -277,8 +295,10 @@ div.tabContent.hide {
 select {
 	-webkit-appearance: button;
 	-moz-appearance: button;
+	appearance: button;
 	-webkit-user-select: none;
 	-moz-user-select: none;
+	user-select: none;
 	font-size: medium;
 	width: 30%;
 	margin: 0;
@@ -346,11 +366,11 @@ img.intLink {
 }
 #decryptBtnBasic {
 	font-size: 18px;
-	padding: ;
+	padding: 4px;
 }
 #showLockBtnBasic {
 	font-size: 18px;
-	padding: ;
+	padding: 4px;
 }
 #emailBtnsTop {
 	display: none;
@@ -451,20 +471,6 @@ img.intLink {
 	display: none;
 }
 
-#helpTop {
-	position: fixed;
-	background-color: inherit;
-	width: 100%;
-	top: 41px;
-	display: none;
-}
-#helpSpace {
-	background-color: inherit;
-	display: none;
-}
-#helpTopMobile {
-	display: block;
-}
 #advancedHelp {
 	display: none;
 }
@@ -683,13 +689,6 @@ img.intLink {
 }
 
 #pwdTable {
-	display: none;
-}
-#helpTopSynth {
-	position: fixed;
-	background-color: inherit;
-	width: 100%;
-	top: 41px;
 	display: none;
 }
 #outputBox {

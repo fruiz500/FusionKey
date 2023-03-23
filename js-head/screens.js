@@ -807,10 +807,7 @@ function openHelp(theID){
 	if(theID.charAt(0) == 'b') document.getElementById('a' + theID.slice(1)).style.display = "block";
 	if(isMobile){									//scroll to the item
 		location.href = '#';
-		location.href = '#a' + theID;
-		if(!isiOS){
-			if(helpTop.style.display == 'block') helpTop.style.display = 'none'
-		}
+		location.href = '#a' + theID
 	}
 }
 
@@ -870,9 +867,6 @@ function showTab(){
 	  if(this.hash == '#mainTab') fillList();
 	  if(this.hash != '#optionsTab'){
 		  optionMsg.textContent = 'Change Name, Key, etc.'
-	  }
-	  if(this.hash != '#helpTab' && !isiOS){
-			if(helpTop.style.display != 'block') helpTop.style.display = 'block'
 	  }
 	}
 

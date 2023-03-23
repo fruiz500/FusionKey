@@ -6,7 +6,7 @@ chrome.runtime.onMessage.addListener(
   function(request, sender, sendResponse) {
 	  
 	if(request.message == "start_info"){							//initial message from content script; begins with SynthPass stuff	
-		clearTimeout(startTimer);	  
+		clearTimeout(startTimer);
 		var hostParts = request.host.split('.');						//get name of the website, ignoring subdomains
 		if(hostParts[hostParts.length - 1].length == 2 && hostParts[hostParts.length - 2].length < 4){			//domain name with second-level suffix
 			websiteName = hostParts.slice(-3).join('.')

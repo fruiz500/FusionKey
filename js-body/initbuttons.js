@@ -5,11 +5,6 @@ window.onload = function() {
 	} else {
 		previewImg.style.width = "80%"					//smaller image on PCs
 	}
-	if(!isMobile || isChrome){						//search box in Help tab. Works on Android Chrome, but won't detect right
-		helpTopMobile.style.display = 'none';
-		helpTop.style.display = 'block';
-		helpSpace.style.display = 'block';
-	}
 	if(isAndroid){										//resize shift buttons on Android
 		extra2mainBtn.style.padding = '11px';
 		main2extraBtn.style.padding = '11px';
@@ -335,11 +330,6 @@ window.onload = function() {
 	
 	isSynthHelp = false;
 	
-	if(!isMobile || isChrome){						//search box in Help tab. Works on Android Chrome, but won't detect right
-		helpTopMobileSynth.style.display = 'none';
-		helpTopSynth.style.display = 'block'
-	}
-	
 //SynthPass interface button listeners
 	okBtnSynth.addEventListener('click', function(){doSynth(false)});					//execute the action
 	okBtnSynth.style.display = 'none';	
@@ -376,11 +366,16 @@ window.onload = function() {
 //collect data from content script. Also triggers initialization
 	chrome.tabs.query({active: true, currentWindow: true}, function(tabs) {
     	activeTab = tabs[0];
-//		inject content script programmatically
-		chrome.scripting.executeScript({
-			target: {tabId: activeTab.id, allFrames: true},
-			files: ["/content.js"]
-		});
+		chrome.tabs.sendMessage(activeTab.id, {message: "send_data"}, function(response) {
+			var lastError = chrome.runtime.lastError;
+			if (lastError && lastError.message.includes("does not exist")) {								//no receiving end, so inject the script instead
+				chrome.scripting.executeScript({
+					target: {tabId: activeTab.id, allFrames: true},
+					files: ["/content.js"]
+				});
+				return;
+			}
+		})
 	});
 	startTimer = setTimeout(function(){											//in case there's no reply from the content script
 		displayPL();

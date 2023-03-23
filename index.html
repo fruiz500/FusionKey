@@ -25,7 +25,7 @@
 <script src="js-opensrc/secrets.js"></script>
 
 <!--Tweet NaCl crypto library 1.0.3 by Dmitry Chestnykh. https://github.com/dchest/tweetnacl-js-->
-<script src="js-opensrc/nacl.js"></script>
+<script src="js-opensrc/nacl-fast.js"></script>
 
 <!--ed2curve-js conversion of curve coordinates 0.2.1 by Dmitry Chestnykh. https://github.com/dchest/ed2curve-js-->
 <script src="js-opensrc/ed2curve.js"></script>
@@ -36,7 +36,7 @@
 <!--lz-string compression algorithm 1.4.4. https://github.com/pieroxy/lz-string-->
 <script src="js-opensrc/lz-string.js"></script>
 
-<!--DOMPurify, used to sanitize decrypted material before putting in DOM v2.4.0. https://github.com/cure53/DOMPurify-->
+<!--DOMPurify, used to sanitize decrypted material before putting in DOM v3.0.1. https://github.com/cure53/DOMPurify-->
 <script src="js-opensrc/purify.js"></script>
 
 <!--jpeg image steganography by Owen Campbell-Moore and others. https://github.com/owencm/js-steg. First jsstegencoder-1.0.js-->
@@ -104,7 +104,7 @@
 
 <!--Main tab-->
 <div class="tabContent" id="mainTab">
-  <div align="center"> <br>
+  <div class="centered"> <br>
     <br>
     <br>
 
@@ -232,7 +232,7 @@
 </div>
   </div>
   <div id="mainBox" contenteditable="true" class="cssbox" accesskey=";" placeholder="Write or paste your message here. You can use nice formatting and add images and files if you click Rich. To encrypt or decrypt, select the correspondents in the top box, then click the button. Add more correspondents by pasting their Locks in this box."></div>
-  <div align="center">
+  <div class="centered">
     <!--buttons below the main box-->
     <div id="mainbuttonsbot">
       <button class="cssbutton" id="niceEditBtn" value="Rich" title="toggle rich text editor (alt-R)" accesskey="r">Rich</button><!--
@@ -331,28 +331,10 @@
 <!--Help tab-->
 <div class="tabContent" id="helpTab">
 <br>
-<div id="helpTop">
+<br>
 <br>
 <span id='helpmsg'>For instructions on how to do things, click on each title.</span>
 <br>
-
-<!--search box, as an iframe-->
-<iframe id="srchform2" src="searchbox.html" width=250 height=40 border=0 frameborder=0 scrolling=no seamless></iframe>
-</div>
-
-<br>
-<!--space so the items aren't buried below the fixed stuff-->
-
-  <div id="helpSpace">
-    <br>
-    <br>
-    <br>
-  </div>
-  <div id="helpTopMobile">
-    <p>For instructions on how to do things, click on each title below. Click again to hide.</p>
-    <p>To get instructions as you click buttons in FusionKey, check <strong>Learn</strong> on the <strong>Options</strong> tab.</p>
-  </div>
-
   <!--the help items begin here-->
   <hr>
   <div id="aa1" class="helpHeading">
@@ -1546,12 +1528,12 @@
     <p><strong>Notice:</strong> Since PassLok is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of PassLok, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>PassLok contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using PassLok.</p>
     <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 0.1.10 (October 2022) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 0.1.11 (March 2023) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  FusionKey v0.1.10 based on PassLok v2.5.2 &#169; F. Ruiz 2022
+  FusionKey v0.1.11 based on PassLok v2.5.3 &#169; F. Ruiz 2023
   </address>
   <ul>
     <li> engine: NaCl by D. Bernstein, W. Janssen, T. Lange, P. Schwabe, M. Dempsky, and A. Moon 2013</li>
@@ -1576,8 +1558,8 @@
 </div>
 
 <!--Directory dialog-->
-<div id="lockScr" class="white_content" align="center">
-  <div id="locktop" align="center">
+<div id="lockScr" class="white_content">
+  <div id="locktop" class="centered">
     <button class="cssbutton" id="lock2mainBtn" value="< Back" title="return to main screen (alt-E)" accesskey="">&#9668; Done</button>
     <br>
     <br>
@@ -1586,14 +1568,14 @@
     <br>
     <br>
   </div>
-  <div align="center" id="lockBtnsTop">
+  <div class="centered" id="lockBtnsTop">
     <button class="cssbutton" id="clearLocksBtn" value="Clear" title="clear box">Clear</button><!--
 --><button class="cssbutton" id="addLockBtn" value="Save" title="save to the local directory | if box is empty, make random item">Random</button><!--
 --><button class="cssbutton" id="removeLockBtn" value="Delete" title="delete the item whose name is displayed">Delete</button><!--
 --><button class="cssbutton" id="resetPFSBtn" value="Reset" title="reset Read-once data for the item whose name is displayed">Reset</button>
   </div>
-  <div align="left" contenteditable="true" class="cssbox" id="lockBox" name="text" rows="9" placeholder="To save a Lock or shared Key, write it in this box, then click Save. You will be asked for a name. You can also use Locks and shared Keys without saving them if you write them here, one line per item."></div>
-  <div align="center" id="lockBtnsBottom">
+  <div contenteditable="true" class="cssbox left" id="lockBox" name="text" rows="9" placeholder="To save a Lock or shared Key, write it in this box, then click Save. You will be asked for a name. You can also use Locks and shared Keys without saving them if you write them here, one line per item."></div>
+  <div class="centered" id="lockBtnsBottom">
     <button class="cssbutton" id="showLockDBBtn" value="All" title="show the entire local directory">All</button><!--
 --><button class="cssbutton" id="mergeLockDBBtn" value="Merge" title="merge into the local directory | Diffie-Hellman merge of this and the main screen contents">Merge</button><!--
 --><label for="lockFile" title="open dialog to select file to load"><span class="cssbutton">Load file</span></label><input type="file" id="lockFile"title="open dialog to select file to load"/>
@@ -1601,7 +1583,7 @@
 </div>
 
 <!--Key dialog-->
-<div id="keyScr" class="white_content" align="center"> <br>
+<div id="keyScr" class="white_content"> <br>
   <div id="pwdMsg" class="message"><span id="javascriptOff">JAVASCRIPT OFF, PASSLOK CANNOT RUN</span></div>
   <br>
   <br>
@@ -1611,7 +1593,7 @@
   <button class="cssbutton" id="newUserBtn" value="new identity" title="set up a new identity">New Identity</button>
   <br>
   <br>
-  <input type="password" class="cssbox" autocomplete="off" id="pwdBox" name="text" placeholder="Enter your secret Key here." align="center"><img id='pwdIcon' class="field-icon" src="" title="click this to see/hide the Password">
+  <input type="password" class="cssbox centered" autocomplete="off" id="pwdBox" name="text" placeholder="Enter your secret Key here."><img id='pwdIcon' class="field-icon" src="" title="click this to see/hide the Password">
   <br>
   <br>
   <button class="cssbutton" id="cancelKeyBtn" value="cancel" title="close Key dialog">Cancel</button>
@@ -1628,13 +1610,13 @@
 </div>
 
 <!--Intro wizard, split into five screens-->
-<div id="introscr" class="block_page" align="center">
-  <h2 id="introWelcome">Welcome to PassLok, a part of FusionKey</h2>
-  <div id="intro1" align="left">
+<div id="introscr" class="block_page">
+  <h2 id="introWelcome" class="centered">Welcome to PassLok, a part of FusionKey</h2>
+  <div id="intro1" class="left">
     <div id="referrerMsg">
       <p>Looks like you received an invitation to use PassLok from someone whose user name is in the box below. If you wish to use a different name for this person, you can change it.</p>
-      <div align="center">
-        <input type="text" class="cssbox" autocomplete="off" id="friendsName" placeholder="Enter your friend's name here. It will be remembered." align="center">
+      <div class="centered">
+        <input type="text" class="cssbox centered" autocomplete="off" id="friendsName" placeholder="Enter your friend's name here. It will be remembered.">
         <br>
         <br>
       </div>
@@ -1643,7 +1625,7 @@
     <p>This is needed to keep a permanent directory of your friends’ Locks and shared Keys, all securely encrypted. If you prefer not to store anything, click <strong>Exit</strong>.</p>
     <div id='introVideoText'>
     <p>If you have three minutes to spare, you may want to watch the fun video called by the button below, which explains how PassLok works. It will load on a separate window. Click <strong>Next</strong> when you're ready.</p>
-    <div align="center">
+    <div class="centered">
       <a href="https://www.youtube.com/watch?v=UxgrES_CGcg" target="_blank">
       <button class="cssbutton" id="introvideo" value="video" title="click this to load the introductory video. WARNING: this may leak your IP number">Alice & Bob Video</button>
       </a></div></div>
@@ -1653,13 +1635,13 @@
 </div>
 
 
-<div id="introscr2" class="block_page" align="center">
-  <div id="intro2" align="left">
+<div id="introscr2" class="block_page">
+  <div id="intro2" class="left">
     <button class="cssbutton" id="backtointro1" value="back" title="back to beginning">&#9668; Back</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Step 2 of 5<br>
     <p>Please enter a name for this Identity here. This way you can use different encryption Keys for different email accounts.</p>
-    <div align="center">
-      <input type="text" class="cssbox" autocomplete="off" id="nameIntro" name="username" placeholder="Enter your Identity Name here" align="center">
+    <div class="centered">
+      <input type="text" class="cssbox centered" autocomplete="off" id="nameIntro" name="username" placeholder="Enter your Identity Name here">
       <br>
       <br>
     </div>
@@ -1668,15 +1650,15 @@
 </div>
 
 
-<div id="introscr3" class="block_page" align="center">
-  <div id="intro3" align="left" >
+<div id="introscr3" class="block_page">
+  <div id="intro3" class="left" >
     <button class="cssbutton" id="backtointro2" value="back" title="back to step 2">&#9668; Back</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Step 3 of 5<br>
     <p>Now enter your Master Key in the box below. You will <strong>never give this Key to anyone</strong>. Make sure to make it long and use $ymbol$, numb3rs, caPiTals, unusual words and mespelingss. You should be able to remember it, because it won't get stored.</p>
     <p>The Suggest button will get you started with five words, which you can modify at will.</p>
-    <div align="center"> <span id="pwdIntroMsg" class="message">This is where the Key score will appear</span><br>
+    <div class="centered"> <span id="pwdIntroMsg" class="message">This is where the Key score will appear</span><br>
       <br>
-      <input type="password" class="cssbox" autocomplete="off" id="pwdIntroBox" name="text" placeholder="Enter your secret Key here" align="center"><img id='pwdIntroIcon' class="field-icon" src="" title="click this to see/hide the Password">
+      <input type="password" class="cssbox centered" autocomplete="off" id="pwdIntroBox" name="text" placeholder="Enter your secret Key here" ><img id='pwdIntroIcon' class="field-icon" src="" title="click this to see/hide the Password">
       <br>
       <br>
       <button class="cssbutton" id="suggestIntroBtn" value="Suggest" title="suggest a Key made of five common words">Suggest</button>
@@ -1689,14 +1671,14 @@
 </div>
 
 
-<div id="introscr4" class="block_page" align="center">
-  <div id="intro4" align="left">
+<div id="introscr4" class="block_page">
+  <div id="intro4" class="left">
     <button class="cssbutton" id="backtointro3" value="back" title="back to step 3">&#9668; Back</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Step 4 of 5<br>
     <p>You will get better security if you also provide some public piece of data about yourself, such as your email address. There's no risk of spam since nothing will be sent out. You can skip this if you want.</p>
     <p>If you want your encrypted output to be compatible with that of <em>PassLok for Email</em>, you must write the email address for this Identity here.</p>
-    <div align="center">
-      <input type="text" class="cssbox" id="emailIntro" name="text" placeholder="Optionally, enter your email or some other not secret personal info here" align="center">
+    <div class="centered">
+      <input type="text" class="cssbox centered" id="emailIntro" name="text" placeholder="Optionally, enter your email or some other not secret personal info here">
       <br>
       <br>
       <button class="cssbutton" id="introRandomBtn" value="Rand." title="display a random token">Random</button>
@@ -1709,31 +1691,31 @@
 </div>
 
 
-<div id="introscr5" class="block_page" align="center">
-  <div id="intro5" align="left">
+<div id="introscr5" class="block_page">
+  <div id="intro5" class="left">
     <button class="cssbutton" id="backtointro4" value="back" title="back to step 4">&#9668; Back</button>
     &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Step 5 of 5<br>
     <p>When you click the button below, the random-looking Lock matching your secret Key will appear on PassLok's Main screen, along with some further instructions. You want to send that Lock to your friends so they can send you encrypted messages. It will also be sent if you make an Invitation message by checking the box below, or switch to Email mode in Options.</p>
     <p>You will start in Basic mode, which shows only the most essential functions. If you are looking for more features, go to the Options tab and check the Advanced checkbox. There is also Email mode, which makes this app fully compatible with <em>PassLok for Email</em>.</p>
     <p>You may not see this screen again, but comprehensive help is always available on the Help tab.</p>
   </div>
-  <div align="center">
+  <div class="centered">
     <input type="checkbox" id="inviteBox" />
     &nbsp; Send out my Lock&nbsp;&nbsp;<br>
     <br>
-    <button class="cssbutton" id="showlockIntroBtn" value="Make Lock" align="center" title="make matching Lock and open Main tab">Finish</button>
+    <button class="cssbutton centered" id="showlockIntroBtn" value="Make Lock" title="make matching Lock and open Main tab">Finish</button>
     <br>
     <br>
     <span id="intromsg2"></span> </div>
 </div>
 
 <!--name dialog-->
-<div id="nameScr" class="white_content" align="center"> <br>
-  <div align="center">
+<div id="nameScr" class="white_content"> <br>
+  <div class="centered">
     <div id="namechangemsg">Please enter a new User name for this account</div>
     <br>
     <br>
-    <input type="text" class="cssbox" autocomplete="off" id="userNameBox" name="name" placeholder="Enter your new User Name here." align="center">
+    <input type="text" class="cssbox centered" autocomplete="off" id="userNameBox" name="name" placeholder="Enter your new User Name here.">
     <br>
     <br>
     <button class="cssbutton" id="cancelNameBtn" value="cancel" title="close name change dialog">Cancel</button>
@@ -1743,7 +1725,7 @@
 </div>
 
 <!--Key change dialog-->
-<div id="keyChange" class="white_content" align="center"> <br>
+<div id="keyChange" class="white_content"> <br>
   <br>
   <div id="newKeyMsg" class="message"></div>
   <br>
@@ -1760,14 +1742,14 @@
 </div>
 
 <!--email change dialog-->
-<div id="emailScr" class="white_content" align="center"> <br>
-  <div align="center"> <span id="emailMsg" class="message">Please enter your new email or similar item, or a new random token</span>
+<div id="emailScr" class="white_content"> <br>
+  <div class="centered"> <span id="emailMsg" class="message">Please enter your new email or similar item, or a new random token</span>
     <br>
     <br>
     <button class="cssbutton" id="randomEmailBtn" value="random" title="insert random token">Random</button>
     <br>
     <br>
-    <input type="text" class="cssbox" autocomplete="off" id='emailBox' name='emailBox' placeholder="Enter your email or some other not secret personal info here." align="center">
+    <input type="text" class="cssbox centered" autocomplete="off" id='emailBox' name='emailBox' placeholder="Enter your email or some other not secret personal info here.">
     <br>
     <br>
     <button class="cssbutton" id="cancelEmailBtn" value="cancel" title="close email dialog">Cancel</button>
@@ -1779,7 +1761,7 @@
 </div>
 
 <!--Decoy In dialog-->
-<div id="decoyIn" class="white_content" align="center"> <br>
+<div id="decoyIn" class="white_content"> <br>
   <span id="decoyInMsg" class="message">Enter the Hidden Message</span>
   <br>
   <br>
@@ -1794,7 +1776,7 @@
 </div>
 
 <!--Decoy Out dialog-->
-<div id="decoyOut" class="white_content" align="center"> <br>
+<div id="decoyOut" class="white_content"> <br>
   <span id="decoyOutMsg" class="message">Enter the Key for the Hidden message</span>
   <br>
   <br>
@@ -1808,7 +1790,7 @@
 </div>
 
 <!--Parts for SSSS dialog-->
-<div id="partsIn" class="white_content" align="center"> <br>
+<div id="partsIn" class="white_content"> <br>
   <p>Enter the total number of parts (between 2 and 255)</p>
   <br>
   <br>
@@ -1826,19 +1808,19 @@
 </div>
 
 <!--Chat dialog, to enter the chat type and date or other information-->
-<div id="chatDialog" class="white_content" align="center"> <br>
+<div id="chatDialog" class="white_content"> <br>
   <br>
   <br>
   <span id="chatmsg">Choose the type of chat, then optionally write in the box a message with date and time</span>
   <br>
   <br>
-  <input type="radio" name="chatmodes" id="dataChat"  title="chat with text messages and file exchange" checked/>
+  <input type="radio" name="chatmodes" id="dataChat"  title="chat with text messages and file exchange"/>
   &nbsp; Text and files&nbsp;&nbsp;
   <input type="radio" name="chatmodes" id="audioChat" title="like Text chat, plus audio"/>
   &nbsp; Audio&nbsp;&nbsp;
   <input type="radio" name="chatmodes" id="videoChat" title="like audio chat, plus video"/>
   &nbsp; Video&nbsp;&nbsp;
-  <input type="radio" name="chatmodes" id="jitsiChat" title="full featured, on jit.si"/>
+  <input type="radio" name="chatmodes" id="jitsiChat" title="full featured, on jit.si" checked/>
   &nbsp; Jitsi
   <br>
   <br>
@@ -1851,8 +1833,8 @@
 </div>
 
 <!--Image hiding dialog-->
-<div id='imageScr' class="white_content" align="center">
-  <button class="cssbutton" id="image2mainBtn" value="< Done" title="return to main screen (alt-I)" accesskey="i">&#9668; Done</button>
+<div id='imageScr' class="white_content">
+  <button class="cssbutton" id="image2mainBtn" value="&lt; Done" title="return to main screen (alt-I)" accesskey="i">&#9668; Done</button>
   <span id="imgSpacer"><br>
   <br>
   <br>
@@ -1915,7 +1897,7 @@
 <td width="75%">
 <input type="password" class="cssbox" id="masterPwd1" title="type Master Key here" placeholder="password here"/><img id="showPwdMode1" class="field-icon" src="images/eye-24.png" title="click this to see/hide the Password">
 </td>
-<td width="5%" align="center">
+<td width="5%" class="centered">
 </td>
 <td width="20%">
 <input type="text" class="cssbox" id="serial1" title="add optional serial"/>
@@ -1925,7 +1907,7 @@
 <td width="75%">
 <input type="password" class="cssbox" id="masterPwd2" title="type Master Key here" placeholder="password here"/><img id="showPwdMode2" class="field-icon" src="images/eye-24.png" title="click this to see/hide the Key">
 </td>
-<td width="5%" align="center">
+<td width="5%" class="centered">
 </td>
 <td width="20%">
 <input type="text" class="cssbox" id="serial2" title="add optional serial"/>
@@ -1935,7 +1917,7 @@
 <td width="75%">
 <input type="password" class="cssbox" id="masterPwd3" title="type Master Key here" placeholder="password here"/><img id="showPwdMode3" class="field-icon" src="images/eye-24.png" title="click this to see/hide the Key">
 </td>
-<td width="5%" align="center">
+<td width="5%" class="centered">
 </td>
 <td width="20%">
 <input type="text" class="cssbox" id="serial3" title="add optional serial"/>
@@ -1945,7 +1927,7 @@
 <td width="75%">
 <input type="password" class="cssbox" id="masterPwd4" title="type Master Key here" placeholder="password here"/><img id="showPwdMode4" class="field-icon" src="images/eye-24.png" title="click this to see/hide the Key">
 </td>
-<td width="5%" align="center">
+<td width="5%" class="centered">
 </td>
 <td width="20%">
 <input type="text" class="cssbox" id="serial4" title="add optional serial"/>
@@ -1965,28 +1947,10 @@
 <!--Help tab--> 
 <div class="tabContent" id="helpTabSynth">
 <br>
-<div id="helpTopSynth">
+<br>
 <br>
 <span id='helpmsgSynth'>For instructions on how to do things, click on each title.</span>
 <br>
-
-<!--search box, as an iframe-->
-<iframe id="srchform3" src="searchbox.html" width=250 height=40 border=0 frameborder=0 scrolling=no seamless></iframe>
-</div>
-
-<br>
-<!--space so the items aren't buried below the fixed stuff-->
-
-  <div id="helpSpaceSynth">
-    <br>
-    <br>
-    <br>
-  </div>
-  <div id="helpTopMobileSynth">
-    <p>For instructions on how to do things, click on each title below. Click again to hide.</p>
-    <p>To get instructions as you click buttons in PassLok, check <strong>Learn</strong> on the <strong>Options</strong> tab.</p>
-  </div>
-
   <!--the help items begin here-->
   <hr>
   <div id="cc1" class="helpHeading">
@@ -2176,12 +2140,12 @@ Output
     <p><strong>Notice:</strong> Since this program is distributed as a piece of human-readable code, we consider it an expression of free speech protected by the laws of many countries. Putting into circulation tampered versions of the app, whether by individuals or public entities, violates free speech and copyright protection laws.</p>
     <p>SynthPass contains strong cryptographic methods, which may be illegal to use in some countries. Please check the local laws before using it.</p>
     <div id="canary"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8BAMAAADI0sRBAAAAGFBMVEUAAAAAAAD///91XhdgYGCcnJzMzMzUqipkv+fEAAAAAXRSTlMAQObYZgAAAYFJREFUOMt1lLGOgzAQREEUaVkHkhpEUkOVmvsDIt31IF1PdP8vnWwzHtaGKRDmsbO7eHGm9Cfyys4km/ojmEvQ/ZBS10N6Gl+I18/v6G/KtCrTOnVuscbWSwsxPYPBwEsGw1nxgEGpxoUzuI00MjuDqWdwvyD4e88nuOdbMFOge3j79V3liHAjL7np4kt4u5V2fwS8bGbbHd3hjZ0wyt1hZAzuxL3FZoffqrUSlaG4qqU2HFbMfoplj68pNqr0T4xF4SFUMyJcY+EqxVgTS4QlwkZjrAXSubFRsw4H5p5BxLlIgwfTIW6DoXafPcYkqN74zRf3uN7bf2HHChvnuMGX7WoRYD8tTN/4q2CS/YQ8tvY79GwsXjO3J6jq/Qz7Mds8ds5RSDypAmz4zSr1E/EfQ9MJHjDd5PSGu1Vt8Q3BOBrVDuNdnj0DB2RCvH0xPpnYHoLhXmluXdajU7E7ONOj+YyP5Fzx9MDHQHIkQGCv1WtcaFqSkKeUumjnVB80TP0D1fGXaRHBg/YAAAAASUVORK5CYII=">
-    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 0.1.10 (October 2022) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
+    <p>This paragraph and the canary logo above attest to the fact that, up until the release of version 0.1.11 (March 2023) we have not received any requests under gag order for user data or modifications of the code. This paragraph will be periodically updated as this situation continues.</p>
     </div>
   </div>
   <hr>
   <address>
-  FusionKey v0.1.10 based on SynthPass 0.2.6 &#169; F. Ruiz 2022
+  FusionKey v0.1.11 based on SynthPass 0.2.9 &#169; F. Ruiz 2023
   </address>
   <ul>
     <li>smart Password engine based on WiseHash by F. Ruiz 2014</li>
